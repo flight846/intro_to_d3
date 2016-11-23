@@ -1214,3 +1214,152 @@ function type92 (d) {
 }
 
 d3.csv('week_temperature_sf.csv', type92, render92)
+
+// example-93
+var outerWidth93 = 500
+var outerHeight93 = 250
+var margin93 = { left: 90, top: 30, right: 30, bottom: 30 }
+
+var xColumn93 = 'name'
+var yColumn93 = 'population'
+
+var innerWidth93 = outerWidth93 - margin93.left - margin93.right
+var innerHeight93 = outerHeight93 - margin93.top - margin93.bottom
+
+var svg93 = d3.select('#example-93').append('svg')
+  .attr('width', outerWidth93)
+  .attr('height', outerHeight93)
+
+var g93 = svg93.append('g')
+  .attr('transform', 'translate(' + margin93.left + ',' + margin93.top + ')')
+
+var xScale93 = d3.scale.ordinal().rangeBands([0, innerWidth93])
+var yScale93 = d3.scale.linear().range([innerHeight93, 0])
+
+function render93 (data) {
+  xScale93.domain(data.map(function (d) { return d[xColumn93]}))
+  yScale93.domain([0, d3.max(data, function (d) { return d[yColumn93]})])
+
+  var bars93 = g93.selectAll('rect').data(data)
+
+  bars93.enter().append('rect')
+  // Correction: the value for xScale.rangeBand()
+  // DOES depend on the data, so it should go in the update phase, not the enter phase.
+  bars93
+    .attr('x', function (d) { return xScale93(d[xColumn93]) })
+    .attr('y', function (d) { return yScale93(d[yColumn93]) })
+    .attr('width', xScale93.rangeBand())
+    .attr('height', function (d) { return innerHeight93 - yScale93(d[yColumn93]) })
+
+  bars93.exit().remove()
+}
+
+function type93 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('geonames_cities_top3.csv', type93, render93)
+
+// example-94
+var outerWidth94 = 500
+var outerHeight94 = 250
+var margin94 = { left: 90, top: 30, right: 30, bottom: 30 }
+var barPadding94 = 0.2
+
+var xColumn94 = 'name'
+var yColumn94 = 'population'
+
+var innerWidth94 = outerWidth94 - margin94.left - margin94.right
+var innerHeight94 = outerHeight94 - margin94.top - margin94.bottom
+
+var svg94 = d3.select('#example-94').append('svg')
+  .attr('width', outerWidth94)
+  .attr('height', outerHeight94)
+
+var g94 = svg94.append('g')
+  .attr('transform', 'translate(' + margin94.left + ',' + margin94.top + ')')
+
+var xScale94 = d3.scale.ordinal().rangeBands([0, innerWidth94], barPadding94)
+var yScale94 = d3.scale.linear().range([innerHeight94, 0])
+
+function render94 (data) {
+  xScale94.domain(data.map(function (d) { return d[xColumn94]}))
+  yScale94.domain([0, d3.max(data, function (d) { return d[yColumn94]})])
+
+  var bars94 = g94.selectAll('rect').data(data)
+
+  bars94.enter().append('rect')
+  // Correction: the value for xScale.rangeBand()
+  // DOES depend on the data, so it should go in the update phase, not the enter phase.
+  bars94
+    .attr('x', function (d) { return xScale94(d[xColumn94]) })
+    .attr('y', function (d) { return yScale94(d[yColumn94]) })
+    .attr('width', xScale94.rangeBand())
+    .attr('height', function (d) { return innerHeight94 - yScale94(d[yColumn94]) })
+
+  bars94.exit().remove()
+}
+
+function type94 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('geonames_cities_top3.csv', type94, render94)
+
+// example-95
+var outerWidth95 = 500
+var outerHeight95 = 250
+
+var margin95 = { left: 90, top: 30, right: 30, bottom: 30 }
+var barPadding95 = 0.2
+
+var xColumn95 = 'name'
+var yColumn95 = 'population'
+
+var innerWidth95 = outerWidth95 - margin95.left - margin95.right
+var innerHeight95 = outerHeight95 - margin95.top - margin95.bottom
+
+var svg95 = d3.select('#example-95').append('svg')
+  .attr('width', outerWidth95)
+  .attr('height', outerHeight95)
+
+var g95 = svg95.append('g')
+  .attr('transform', 'translate(' + margin95.left + ',' + margin95.top + ')')
+
+var xAxisG95 = g95.append('g')
+  .attr('transform', 'translate(0,' + innerHeight95 + ')')
+var yAxisG95 = g95.append('g')
+
+var xScale95 = d3.scale.ordinal().rangeBands([0, innerWidth95], barPadding95)
+var yScale95 = d3.scale.linear().range([innerHeight95, 0])
+
+var xAxis95 = d3.svg.axis().scale(xScale95).orient('bottom')
+var yAxis95 = d3.svg.axis().scale(yScale95).orient('left')
+
+function render95 (data) {
+  xScale95.domain(data.map(function (d) { return d[xColumn95] }))
+  yScale95.domain([0, d3.max(data, function (d) { return d[yColumn95] })])
+
+  xAxisG95.call(xAxis95)
+  yAxisG95.call(yAxis95)
+
+  var bars95 = g95.selectAll('rect').data(data)
+  bars95.enter().append('rect')
+    .attr('width', xScale95.rangeBand())
+
+  bars95
+    .attr('x', function (d) { return xScale95(d[xColumn95]) })
+    .attr('y', function (d) { return yScale95(d[yColumn95]) })
+    .attr('height', function (d) { return innerHeight95 - yScale95(d[yColumn95]) })
+
+  bars95.exit().remove()
+}
+
+function type95 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('geonames_cities_top3.csv', type95, render95)

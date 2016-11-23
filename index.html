@@ -56,6 +56,9 @@
         <li><a href="#density-transparency-css">Showing density with CSS</a></li>
         <li><a href="#data-temperature">Example 3- Scatterplot</a></li>
         <li><a href="#data-temperature-line">Example 3- Line</a></li>
+        <li><a href="#basic-barchart">Basic bar chart</a></li>
+        <li><a href="#bar-padding">Bar padding</a></li>
+        <li><a href="#add-axes">Adding axes</a></li>
 			</ul>
 		</div>
 		<div class="col-md-10 col-xs-12 main-container">
@@ -2192,8 +2195,11 @@
 						&nbsp;var margin = { left: 30, top: 30, right: 30, bottom: 30 }; <br />
 
 						<br />
+            &nbsp;// set inner margin <br>
 						&nbsp;var innerWidth = outerwidth - margin.left - margin.right; <br />
 						&nbsp;var innerHeight = outerHeight - margin.top - margin.bottom; <br />
+            <br>
+            &nbsp;// set x, y data <br>
 						&nbsp;var xColumn = "timestamp"; <br />
 						&nbsp;var yColumn = "temperature"; <br />
 						<br />
@@ -2219,6 +2225,7 @@
             &nbsp;function render(data) { <br />
             &nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
             &nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+            <br>
             &nbsp;&nbsp;path.attr("d", line(data)); // assign the line path with M, L values from data <br>
             &nbsp;} <br>
             <br />
@@ -2236,11 +2243,222 @@
 					</code>
 				</div>
 			</div>
+      <br>
+      <div id="basic-barchart">
+        <h4>Basic bar chart</h4>
+        <div class="row panel">
+          <div id="example-93"></div>
+          <p>index.html</p>
+          <code>
+            &lt;script&gt;<br>
+            <br>
+            &nbsp;// config vars <br>
+            &nbsp;var outerWidth = 500; <br>
+            &nbsp;var outerHeight = 250; <br>
+            <br>
+            &nbsp;// D3 margin convenntion <br>
+            &nbsp;var margin = { left: 90, top: 30, right: 30, bottom: 30 }; <br>
+            <br>
+            &nbsp;// set x, y data <br>
+            &nbsp;var xColumn = "name"; <br>
+            &nbsp;var yColumn = "population"; <br>
+            <br>
+            &nbsp;// set inner margin <br>
+            &nbsp;var innerWidth  = outerWidth  - margin.left - margin.right; <br>
+            &nbsp;var innerHeight = outerHeight - margin.top  - margin.bottom; <br>
+            <br>
+            &nbsp; // create svg <br>
+            &nbsp;var svg = d3.select("body").append("svg") <br>
+            &nbsp;  .attr("width",  outerWidth) <br>
+            &nbsp;  .attr("height", outerHeight); <br>
+            <br>
+            &nbsp;var g = svg.append("g") <br>
+            &nbsp;  .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); <br>
+            <br>
+            &nbsp;// set x, y scale range <br>
+            &nbsp;var xScale = d3.scale.ordinal().rangeBands([0, innerWidth]); <br>
+            &nbsp;var yScale = d3.scale.linear().range([innerHeight, 0]); <br>
+            <br>
+            &nbsp;// maps data space to pixel space <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;  xScale.domain(data.map( function (d){ return d[xColumn]; })); <br>
+            &nbsp;  yScale.domain([0, d3.max(data, function (d){ return d[yColumn]; })]); <br>
+            <br>
+            &nbsp;  var bars = g.selectAll("rect").data(data); <br>
+            <br>
+            &nbsp;  // enter phase <br>
+            &nbsp;  bars.enter().append("rect"); <br>
+            <br>
+            &nbsp;  // Correction: the value for xScale.rangeBand() <br>
+            &nbsp;  // DOES depend on the data, so it should go in the update phase, not the enter phase. <br>
+            &nbsp;  // Update phase <br>
+            &nbsp;  bars <br>
+            &nbsp;    .attr("x", function (d){ return xScale(d[xColumn]); }) <br>
+            &nbsp;    .attr("y", function (d){ return yScale(d[yColumn]); }) <br>
+            &nbsp;    .attr("width", xScale.rangeBand()) <br>
+            &nbsp;    .attr("height", function (d){ return innerHeight - yScale(d[yColumn]); }); <br>
+            <br>
+            &nbsp;  // exit phase <br>
+            &nbsp;  bars.exit().remove(); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("geonames_cities_top3.csv", type, render); <br>
+          </code>
+        </div>
+      </div>
+      <br>
+      <div id="bar-padding">
+        <h4>Bar padding</h4>
+        <div class="row panel">
+          <div id="example-94"></div>
+          <p>index.html</p>
+          <code>
+            &lt;script&gt;<br>
+            <br>
+            &nbsp;// config vars <br>
+            &nbsp;var outerWidth = 500; <br>
+            &nbsp;var outerHeight = 250; <br>
+            &nbsp;var barPadding = 0.2; <br>
+            <br>
+            &nbsp;// D3 margin convenntion <br>
+            &nbsp;var margin = { left: 90, top: 30, right: 30, bottom: 30 }; <br>
+            <br>
+            &nbsp;// set x, y data <br>
+            &nbsp;var xColumn = "name"; <br>
+            &nbsp;var yColumn = "population"; <br>
+            <br>
+            &nbsp;// set inner margin <br>
+            &nbsp;var innerWidth  = outerWidth  - margin.left - margin.right; <br>
+            &nbsp;var innerHeight = outerHeight - margin.top  - margin.bottom; <br>
+            <br>
+            &nbsp; // create svg <br>
+            &nbsp;var svg = d3.select("body").append("svg") <br>
+            &nbsp;  .attr("width",  outerWidth) <br>
+            &nbsp;  .attr("height", outerHeight); <br>
+            <br>
+            &nbsp;var g = svg.append("g") <br>
+            &nbsp;  .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); <br>
+            <br>
+            &nbsp;// set x, y scale range <br>
+            &nbsp;var xScale = d3.scale.ordinal().rangeBands([0, innerWidth], barPadding); <br>
+            &nbsp;var yScale = d3.scale.linear().range([innerHeight, 0]); <br>
+            <br>
+            &nbsp;// maps data space to pixel space <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;  xScale.domain(data.map( function (d){ return d[xColumn]; })); <br>
+            &nbsp;  yScale.domain([0, d3.max(data, function (d){ return d[yColumn]; })]); <br>
+            <br>
+            &nbsp;  var bars = g.selectAll("rect").data(data); <br>
+            <br>
+            &nbsp;  // enter phase <br>
+            &nbsp;  bars.enter().append("rect"); <br>
+            <br>
+            &nbsp;  // Correction: the value for xScale.rangeBand() <br>
+            &nbsp;  // DOES depend on the data, so it should go in the update phase, not the enter phase. <br>
+            &nbsp;  // Update phase <br>
+            &nbsp;  bars <br>
+            &nbsp;    .attr("x", function (d){ return xScale(d[xColumn]); }) <br>
+            &nbsp;    .attr("y", function (d){ return yScale(d[yColumn]); }) <br>
+            &nbsp;    .attr("width", xScale.rangeBand()) <br>
+            &nbsp;    .attr("height", function (d){ return innerHeight - yScale(d[yColumn]); }); <br>
+            <br>
+            &nbsp;  // exit phase <br>
+            &nbsp;  bars.exit().remove(); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("geonames_cities_top3.csv", type, render); <br>
+          </code>
+        </div>
+      </div>
+      <br>
+      <div id="add-axes">
+        <h4>Adding axes</h4>
+        <div class="row panel">
+          <div id="example-95"></div>
+          <p>index.html</p>
+          <code>
+            &lt;script&gt;<br>
+            <br>
+            &nbsp;// config vars <br>
+            &nbsp;var outerWidth = 500; <br>
+            &nbsp;var outerHeight = 250; <br>
+            &nbsp;var barPadding = 0.2; <br>
+            <br>
+            &nbsp;// D3 margin convenntion <br>
+            &nbsp;var margin = { left: 90, top: 30, right: 30, bottom: 30 }; <br>
+            <br>
+            &nbsp;// set x, y data <br>
+            &nbsp;var xColumn = "name"; <br>
+            &nbsp;var yColumn = "population"; <br>
+            <br>
+            &nbsp;// set inner margin <br>
+            &nbsp;var innerWidth  = outerWidth  - margin.left - margin.right; <br>
+            &nbsp;var innerHeight = outerHeight - margin.top  - margin.bottom; <br>
+            <br>
+            &nbsp;// create svg <br>
+            &nbsp;var svg = d3.select("body").append("svg") <br>
+            &nbsp;  .attr("width",  outerWidth) <br>
+            &nbsp;  .attr("height", outerHeight); <br>
+            <br>
+            &nbsp;var g = svg.append("g") <br>
+            &nbsp;  .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); <br>
+            <br>
+            &nbsp;// setup axis <br>
+            &nbsp;var xAxisG = g.append("g") <br>
+            &nbsp;  .attr("transform", "translate(0," + innerHeight + ")"); <br>
+            &nbsp;var yAxisG = g.append("g"); <br>
+            <br>
+            &nbsp;// set x, y scale range <br>
+            &nbsp;var xScale = d3.scale.ordinal().rangeBands([0, innerWidth], barPadding); <br>
+            &nbsp;var yScale = d3.scale.linear().range([innerHeight, 0]); <br>
+            <br>
+            &nbsp;// maps data space to pixel space <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;  xScale.domain(data.map( function (d){ return d[xColumn]; })); <br>
+            &nbsp;  yScale.domain([0, d3.max(data, function (d){ return d[yColumn]; })]); <br>
+            <br>
+            &nbsp;  var bars = g.selectAll("rect").data(data); <br>
+            <br>
+            &nbsp;  // enter phase <br>
+            &nbsp;  bars.enter().append("rect"); <br>
+            <br>
+            &nbsp;  // Correction: the value for xScale.rangeBand() <br>
+            &nbsp;  // DOES depend on the data, so it should go in the update phase, not the enter phase. <br>
+            &nbsp;  // Update phase <br>
+            &nbsp;  bars <br>
+            &nbsp;    .attr("x", function (d){ return xScale(d[xColumn]); }) <br>
+            &nbsp;    .attr("y", function (d){ return yScale(d[yColumn]); }) <br>
+            &nbsp;    .attr("width", xScale.rangeBand()) <br>
+            &nbsp;    .attr("height", function (d){ return innerHeight - yScale(d[yColumn]); }); <br>
+            <br>
+            &nbsp;  // exit phase <br>
+            &nbsp;  bars.exit().remove(); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("geonames_cities_top3.csv", type, render); <br>
+          </code>
+        </div>
+      </div>
 		</div>
 	</div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="js/app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
