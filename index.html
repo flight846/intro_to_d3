@@ -2417,7 +2417,7 @@
             &nbsp;var xAxisG = g.append("g") <br>
             &nbsp;  .attr("transform", "translate(0," + innerHeight + ")"); <br>
             &nbsp;var yAxisG = g.append("g"); <br>
-            <br>
+            <br />
             &nbsp;// set x, y scale range <br>
             &nbsp;var xScale = d3.scale.ordinal().rangeBands([0, innerWidth], barPadding); <br>
             &nbsp;var yScale = d3.scale.linear().range([innerHeight, 0]); <br>
@@ -2426,6 +2426,9 @@
             &nbsp;function render(data){ <br>
             &nbsp;  xScale.domain(data.map( function (d){ return d[xColumn]; })); <br>
             &nbsp;  yScale.domain([0, d3.max(data, function (d){ return d[yColumn]; })]); <br>
+            <br>
+            &nbsp;  xAxisG.call(xAxis); <br>
+            &nbsp;  yAxisG.call(yAxis); <br>
             <br>
             &nbsp;  var bars = g.selectAll("rect").data(data); <br>
             <br>
