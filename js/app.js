@@ -572,198 +572,6 @@ function type78 (d) {
 d3.csv('iris.csv', type78, render78)
 // render70(iris_data)
 
-// data 79
-var pop_data = [
-  { country_code: 'BDI', population: 9232753, gdp: 2026864414.46871 },
-  { country_code: 'COM', population: 683081, gdp: 543376206.062274 },
-  { country_code: 'ERI', population: 5741159, gdp: 2117039510.70194 },
-  { country_code: 'ETH', population: 87095281, gdp: 26311310604.9888 },
-  { country_code: 'KEN', population: 40909194, gdp: 32198151217.2214 },
-  { country_code: 'MDG', population: 21079532, gdp: 8837041787.49382 },
-  { country_code: 'MWI', population: 15013694, gdp: 5398616984.59149 },
-  { country_code: 'MUS', population: 1230659, gdp: 9718331362.63822 },
-  { country_code: 'MOZ', population: 23967265, gdp: 9274448731.91612 },
-  { country_code: 'RWA', population: 10836732, gdp: 5624506157.41067 },
-  { country_code: 'SYC', population: 91208, gdp: 969973774.818177 },
-  { country_code: 'SSD', population: 9940929, gdp: 15178973598.0733 },
-  { country_code: 'UGA', population: 33987213, gdp: 16030996179.1077 },
-  { country_code: 'TZA', population: 44973330, gdp: 22915004297.2183 },
-  { country_code: 'ZMB', population: 13216985, gdp: 16190196832.0872 },
-  { country_code: 'ZWE', population: 13076978, gdp: 7433314459.73933 },
-  { country_code: 'AGO', population: 19549124, gdp: 82470894868.3337 },
-  { country_code: 'CMR', population: 20624343, gdp: 22493301699.3672 },
-  { country_code: 'CAF', population: 4349921, gdp: 1986014759.19785 },
-  { country_code: 'TCD', population: 11720781, gdp: 10657705072.3284 },
-  { country_code: 'COG', population: 4111715, gdp: 12007880067.3847 },
-  { country_code: 'COD', population: 62191161, gdp: 13138775753.2026 },
-  { country_code: 'GNQ', population: 696167, gdp: 12261420852.3549 },
-  { country_code: 'GAB', population: 1556222, gdp: 14507032805.9824 },
-  { country_code: 'STP', population: 178228, gdp: 201037916.583708 },
-  { country_code: 'DZA', population: 37062820, gdp: 161207304960.455 },
-  { country_code: 'EGY', population: 78075705, gdp: 218887812549.851 },
-  { country_code: 'MAR', population: 31642360, gdp: 90770671431.6696 },
-  { country_code: 'SDN', population: 35652002, gdp: 64849930757.6995 },
-  { country_code: 'TUN', population: 10631830, gdp: 44377742070.7 },
-  { country_code: 'BWA', population: 1969341, gdp: 13746712705.5936 },
-  { country_code: 'LSO', population: 2008921, gdp: 2203835214.2935 },
-  { country_code: 'NAM', population: 2178967, gdp: 11065912279.3816 },
-  { country_code: 'ZAF', population: 51452352, gdp: 363240728680.384 },
-  { country_code: 'SWZ', population: 1193148, gdp: 3691050502.68749 },
-  { country_code: 'BEN', population: 9509798, gdp: 6558416322.12 },
-  { country_code: 'BFA', population: 15540284, gdp: 9209288383.08711 },
-  { country_code: 'CPV', population: 487601, gdp: 1664310632.03162 },
-  { country_code: 'CIV', population: 18976588, gdp: 22920779597.555 },
-  { country_code: 'GMB', population: 1680640, gdp: 951805801.354012 },
-  { country_code: 'GHA', population: 24262901, gdp: 32174210792.9631 },
-  { country_code: 'GIN', population: 10876033, gdp: 4735956475.83803 },
-  { country_code: 'GNB', population: 1586624, gdp: 835390892.988319 },
-  { country_code: 'LBR', population: 3957990, gdp: 1292696475.95873 },
-  { country_code: 'MLI', population: 13985961, gdp: 9422267259.9894 },
-  { country_code: 'MRT', population: 3609420, gdp: 3671380305.41277 },
-  { country_code: 'NER', population: 15893746, gdp: 5718589550.16349 },
-  { country_code: 'NGA', population: 159707780, gdp: 229507890739.083 },
-  { country_code: 'SEN', population: 12950564, gdp: 12932427724.3508 },
-  { country_code: 'SLE', population: 5751976, gdp: 2575466372.26831 },
-  { country_code: 'TGO', population: 6306014, gdp: 3172945282.32304 },
-  { country_code: 'CHN', population: 1359821465, gdp: 5930529470799.17 },
-  { country_code: 'HKG', population: 7049514, gdp: 228695747309.89 },
-  { country_code: 'MAC', population: 534626, gdp: 28359706123.0951 },
-  { country_code: 'JPN', population: 127352833, gdp: 5495379357484.62 },
-  { country_code: 'MNG', population: 2712738, gdp: 6200357070.1148 },
-  { country_code: 'KOR', population: 48453931, gdp: 1014890141871.14 },
-  { country_code: 'KAZ', population: 15921127, gdp: 148052371903.631 },
-  { country_code: 'KGZ', population: 5334223, gdp: 4794361821.20611 },
-  { country_code: 'TJK', population: 7627326, gdp: 5642221528.67114 },
-  { country_code: 'TKM', population: 5041995, gdp: 22148070175.4386 },
-  { country_code: 'UZB', population: 27769270, gdp: 39332771014.013 },
-  { country_code: 'AFG', population: 28397812, gdp: 15936784436.1811 },
-  { country_code: 'BGD', population: 151125475, gdp: 100357022443.833 },
-  { country_code: 'BTN', population: 716939, gdp: 1585319109.1083 },
-  { country_code: 'IND', population: 1205624648, gdp: 1708450861364.17 },
-  { country_code: 'IRN', population: 74462314, gdp: 422567967404.512 },
-  { country_code: 'MDV', population: 325694, gdp: 2134104883.7014 },
-  { country_code: 'NPL', population: 26846016, gdp: 16010389261.745 },
-  { country_code: 'PAK', population: 173149306, gdp: 177406854514.885 },
-  { country_code: 'LKA', population: 20758779, gdp: 49567521669.9098 },
-  { country_code: 'BRN', population: 400569, gdp: 12369708858.9029 },
-  { country_code: 'KHM', population: 14364931, gdp: 11242266333.9246 },
-  { country_code: 'IDN', population: 240676485, gdp: 709190822690.739 },
-  { country_code: 'LAO', population: 6395713, gdp: 7181441151.89789 },
-  { country_code: 'MYS', population: 28275835, gdp: 247533525517.698 },
-  { country_code: 'PHL', population: 93444322, gdp: 199589447424.074 },
-  { country_code: 'SGP', population: 5078969, gdp: 217200123752.449 },
-  { country_code: 'THA', population: 66402316.00000001, gdp: 318907930075.712 },
-  { country_code: 'TLS', population: 1079450, gdp: 934300000 },
-  { country_code: 'VNM', population: 89047397, gdp: 115931749904.86 },
-  { country_code: 'ARM', population: 2963496, gdp: 9260297329.12273 },
-  { country_code: 'AZE', population: 9094718, gdp: 52905998878.7143 },
-  { country_code: 'BHR', population: 1251513, gdp: 25713547868.8354 },
-  { country_code: 'CYP', population: 1103685, gdp: 23132450331.1258 },
-  { country_code: 'GEO', population: 4388674, gdp: 11638236642.8476 },
-  { country_code: 'IRQ', population: 30962380, gdp: 142814704615.385 },
-  { country_code: 'ISR', population: 7420368, gdp: 231674400561.648 },
-  { country_code: 'JOR', population: 6454554, gdp: 26425379366.6132 },
-  { country_code: 'KWT', population: 2991580, gdp: 119934674734.616 },
-  { country_code: 'LBN', population: 4341092, gdp: 37124378109.4527 },
-  { country_code: 'OMN', population: 2802768, gdp: 58813004375.2601 },
-  { country_code: 'QAT', population: 1749713, gdp: 127332413912.719 },
-  { country_code: 'SAU', population: 27258387, gdp: 526811466666.667 },
-  { country_code: 'TUR', population: 72137546, gdp: 731144392556.339 },
-  { country_code: 'ARE', population: 8441537, gdp: 287421818965.758 },
-  { country_code: 'YEM', population: 22763008, gdp: 31883409718.7382 },
-  { country_code: 'BLR', population: 9491070, gdp: 55220932613.958 },
-  { country_code: 'BGR', population: 7389175, gdp: 47727325908.633 },
-  { country_code: 'CZE', population: 10553701, gdp: 198475392670.157 },
-  { country_code: 'HUN', population: 10014633, gdp: 127503279792.248 },
-  { country_code: 'POL', population: 38198754, gdp: 469736810690.719 },
-  { country_code: 'MDA', population: 3573024, gdp: 5811622393.98689 },
-  { country_code: 'ROU', population: 21861476, gdp: 164792252745.524 },
-  { country_code: 'RUS', population: 143617913, gdp: 1524916698233.31 },
-  { country_code: 'SVK', population: 5433437, gdp: 87077443708.6093 },
-  { country_code: 'UKR', population: 46050220, gdp: 136418622767.355 },
-  { country_code: 'DNK', population: 5550959, gdp: 313176334519.573 },
-  { country_code: 'EST', population: 1298533, gdp: 18909381436.8421 },
-  { country_code: 'FIN', population: 5367693, gdp: 235163157894.737 },
-  { country_code: 'ISL', population: 318042, gdp: 12564891657.7225 },
-  { country_code: 'IRL', population: 4467561, gdp: 208022028244.737 },
-  { country_code: 'LVA', population: 2090518.9999999998, gdp: 24009680459.9868 },
-  { country_code: 'LTU', population: 3068457, gdp: 36306384146.1075 },
-  { country_code: 'NOR', population: 4891251, gdp: 421236092715.232 },
-  { country_code: 'SWE', population: 9382297, gdp: 462903051317.614 },
-  { country_code: 'GBR', population: 62066350, gdp: 2285561538461.54 },
-  { country_code: 'ALB', population: 3150143, gdp: 11858166294.8409 },
-  { country_code: 'BIH', population: 3845929, gdp: 16775469777.6516 },
-  { country_code: 'HRV', population: 4338027, gdp: 58873839434.9834 },
-  { country_code: 'GRC', population: 11109999, gdp: 292304602315.789 },
-  { country_code: 'ITA', population: 60508978, gdp: 2041954747600 },
-  { country_code: 'MLT', population: 424738, gdp: 8163841059.60265 },
-  { country_code: 'MNE', population: 620078, gdp: 4114780573.5 },
-  { country_code: 'PRT', population: 10589792, gdp: 227446710526.316 },
-  { country_code: 'SRB', population: 9647109, gdp: 36990001283.5323 },
-  { country_code: 'SVN', population: 2054232, gdp: 46908328071.2701 },
-  { country_code: 'ESP', population: 46182038, gdp: 1375815789473.68 },
-  { country_code: 'MKD', population: 2102216, gdp: 9338665630.76177 },
-  { country_code: 'AUT', population: 8401924, gdp: 375217439473.684 },
-  { country_code: 'BEL', population: 10941288, gdp: 468078947368.421 },
-  { country_code: 'FRA', population: 63230866, gdp: 2548315789473.68 },
-  { country_code: 'DEU', population: 83017404, gdp: 3282894736842.11 },
-  { country_code: 'LUX', population: 507885, gdp: 51713947368.4211 },
-  { country_code: 'MCO', population: 36845, gdp: 5350993377.48344 },
-  { country_code: 'NLD', population: 16615242.999999998, gdp: 772090789473.684 },
-  { country_code: 'CHE', population: 7830534, gdp: 550638974461.538 },
-  { country_code: 'ATG', population: 87233, gdp: 1161528615.92593 },
-  { country_code: 'ABW', population: 101597, gdp: 2467703910.61453 },
-  { country_code: 'BHS', population: 360498, gdp: 7888087000 },
-  { country_code: 'BRB', population: 280396, gdp: 4433700000 },
-  { country_code: 'CUB', population: 11281768, gdp: 64328220000 },
-  { country_code: 'DMA', population: 71167, gdp: 471851098.518519 },
-  { country_code: 'DOM', population: 10016797, gdp: 51748279416.0089 },
-  { country_code: 'GRD', population: 104677, gdp: 783602099.124051 },
-  { country_code: 'HTI', population: 9896400, gdp: 6634579143.36112 },
-  { country_code: 'JAM', population: 2741485, gdp: 13202998397.8027 },
-  { country_code: 'PRI', population: 3709671, gdp: 97147300000 },
-  { country_code: 'KNA', population: 52352, gdp: 675553707.777778 },
-  { country_code: 'LCA', population: 177397, gdp: 1208853571.11111 },
-  { country_code: 'VCT', population: 109316, gdp: 674762008.518518 },
-  { country_code: 'TTO', population: 1328095, gdp: 20667611846.2508 },
-  { country_code: 'BLZ', population: 308595, gdp: 1397900000 },
-  { country_code: 'CRI', population: 4669685, gdp: 36298327620.413 },
-  { country_code: 'SLV', population: 6218195, gdp: 21418300000 },
-  { country_code: 'GTM', population: 14341576, gdp: 41338161799.1082 },
-  { country_code: 'HND', population: 7621204, gdp: 15729644901.1459 },
-  { country_code: 'MEX', population: 117886404, gdp: 1047368841686.06 },
-  { country_code: 'NIC', population: 5822209, gdp: 8586295846.08302 },
-  { country_code: 'PAN', population: 3678128, gdp: 26589600000 },
-  { country_code: 'ARG', population: 40374224, gdp: 368736062143.669 },
-  { country_code: 'BOL', population: 10156601, gdp: 19649724655.5819 },
-  { country_code: 'BRA', population: 195210154, gdp: 2143035333258.24 },
-  { country_code: 'CHL', population: 17150760, gdp: 217556229881.153 },
-  { country_code: 'COL', population: 46444798, gdp: 287000940839.272 },
-  { country_code: 'ECU', population: 15001072, gdp: 67513698000 },
-  { country_code: 'GUY', population: 786126, gdp: 2259288026.41972 },
-  { country_code: 'PRY', population: 6459721, gdp: 20028375553.9077 },
-  { country_code: 'PER', population: 29262830, gdp: 157609814184.397 },
-  { country_code: 'SUR', population: 524960, gdp: 4368007284.81569 },
-  { country_code: 'URY', population: 3371982, gdp: 38846222984.5698 },
-  { country_code: 'VEN', population: 29043283, gdp: 393807511437.279 },
-  { country_code: 'BMU', population: 64950.99999999999, gdp: 5744414000 },
-  { country_code: 'CAN', population: 34126240, gdp: 1577040082217.76 },
-  { country_code: 'USA', population: 312247116, gdp: 14958300000000 },
-  { country_code: 'AUS', population: 22404488, gdp: 1141793593834.25 },
-  { country_code: 'NZL', population: 4368136, gdp: 143246762589.928 },
-  { country_code: 'FJI', population: 860559, gdp: 3225095136.31862 },
-  { country_code: 'PNG', population: 6858945, gdp: 9480047958.80839 },
-  { country_code: 'SLB', population: 526447, gdp: 678625481.686751 },
-  { country_code: 'VUT', population: 236299, gdp: 700804045.16412 },
-  { country_code: 'KIR', population: 97743, gdp: 150431113.557145 },
-  { country_code: 'MHL', population: 52428, gdp: 163200000 },
-  { country_code: 'FSM', population: 103619, gdp: 294117230.497109 },
-  { country_code: 'PLW', population: 20470, gdp: 196543326.079735 },
-  { country_code: 'WSM', population: 186029, gdp: 572160378.287853 },
-  { country_code: 'TON', population: 104098, gdp: 369212477.46289 },
-  { country_code: 'TUV', population: 9827, gdp: 31824701.2783331 }
-]
-
 // example 79
 var outerWidth79 = 300
 var outerHeight79 = 250
@@ -794,7 +602,13 @@ function render79 (data) {
   circles79.exit().remove()
 }
 
-render79(pop_data)
+function type79 (d) {
+  d.population = +d.population
+  d.gdp = +d.gdp
+  return d
+}
+
+d3.csv('countries_population_GDP.csv', type79, render79)
 
 // example 80
 var outerWidth80 = 300
@@ -826,7 +640,13 @@ function render80 (data) {
   circles80.exit().remove()
 }
 
-render80(pop_data)
+function type80 (d) {
+  d.population = +d.population
+  d.gdp = +d.gdp
+  return d
+}
+
+d3.csv('countries_population_GDP.csv', type80, render80)
 
 // example 81
 var outerWidth81 = 300
@@ -862,7 +682,13 @@ function render81 (data) {
   circles81.exit().remove()
 }
 
-render81(pop_data)
+function type81 (d) {
+  d.population = +d.population
+  d.gdp = +d.gdp
+  return d
+}
+
+d3.csv('countries_population_GDP.csv', type81, render81)
 
 // example 82
 var outerWidth82 = 300
@@ -898,7 +724,13 @@ function render82 (data) {
   circles82.exit().remove()
 }
 
-render82(pop_data)
+function type82 (d) {
+  d.population = +d.population
+  d.gdp = +d.gdp
+  return d
+}
+
+d3.csv('countries_population_GDP.csv', type82, render82)
 
 // example 83
 var outerWidth83 = 300
@@ -934,7 +766,13 @@ function render83 (data) {
   circles83.exit().remove()
 }
 
-render83(pop_data)
+function type83 (d) {
+  d.population = +d.population
+  d.gdp = +d.gdp
+  return d
+}
+
+d3.csv('countries_population_GDP.csv', type83, render83)
 
 // example 84
 var outerWidth84 = 300
@@ -972,7 +810,13 @@ function render84 (data) {
   circles84.exit().remove()
 }
 
-render84(pop_data)
+function type84 (d) {
+  d.population = +d.population
+  d.gdp = +d.gdp
+  return d
+}
+
+d3.csv('countries_population_GDP.csv', type84, render84)
 
 // example 85
 var outerWidth85 = 300
@@ -1013,7 +857,13 @@ function render85 (data) {
   circles85.exit().remove()
 }
 
-render85(pop_data)
+function type85 (d) {
+  d.population = +d.population
+  d.gdp = +d.gdp
+  return d
+}
+
+d3.csv('countries_population_GDP.csv', type85, render85)
 
 // example 86
 var outerWidth86 = 300
@@ -1060,7 +910,13 @@ function render86 (data) {
   circles86.exit().remove()
 }
 
-render86(pop_data)
+function type86 (d) {
+  d.population = +d.population
+  d.gdp = +d.gdp
+  return d
+}
+
+d3.csv('countries_population_GDP.csv', type86, render86)
 
 // example 87
 var outerWidth87 = 300
@@ -1105,7 +961,13 @@ function render87 (data) {
   circles87.exit().remove()
 }
 
-render87(pop_data)
+function type87 (d) {
+  d.population = +d.population
+  d.gdp = +d.gdp
+  return d
+}
+
+d3.csv('countries_population_GDP.csv', type87, render87)
 
 var temp_data = [
   { timestamp: '2015-03-20T21:00:00.000Z', temperature: 23.9516625615764 },
