@@ -51,7 +51,11 @@
 				<li><a href="#sizing-inner-width-height">Sizing the inner width and height</a></li>
 				<li><a href="#margin-var">Using variables to define the margin</a></li>
 				<li><a href="#d3-margin">D3 margin convention</a></li>
+        <li><a href="#visualising-cities">Visualising cities</a></li>
 				<li><a href="#example-2">Example 2</a></li>
+        <li><a href="#density-transparency-css">Showing density with CSS</a></li>
+        <li><a href="#data-temperature">Example 3- Scatterplot</a></li>
+        <li><a href="#data-temperature-line">Example 3- Line</a></li>
 			</ul>
 		</div>
 		<div class="col-md-10 col-xs-12 main-container">
@@ -1870,10 +1874,170 @@
 				</div>
 			</div>
 			<br />
-			<div id="d3-margin">
-				<h4>Example 2- Temperature in San Francisco</h4>
+      <div id="visualising-cities">
+				<h4>Example 2- Visualising cities</h4>
 				<div class="row panel">
 					<div id="example-88"></div>
+					<p>index.html</p>
+					<code>
+            &lt;script&gt;<br>
+              <br>
+              &nbsp;// Config vars <br>
+              &nbsp;var outerWidth  = 500;<br>
+              &nbsp;var outerHeight = 250;<br>
+              <br>
+              &nbsp;var margin = { left: -50, top: 0, right: -50, bottom: 0 }; <br>
+              <br>
+              &nbsp;var xColumn = "longitude"; <br>
+              &nbsp;var yColumn = "latitude"; <br>
+              &nbsp;var rColumn = "population"; <br>
+              <br>
+              &nbsp;var peoplePerPixel = 100000; <br>
+              <br>
+              &nbsp;var innerWidth  = outerWidth  - margin.left - margin.right; <br>
+              &nbsp;var innerHeight = outerHeight - margin.top  - margin.bottom; <br>
+              <br>
+              &nbsp;var svg = d3.select("body").append("svg") <br>
+              &nbsp;  .attr("width",  outerWidth) <br>
+              &nbsp;  .attr("height", outerHeight); <br>
+              <br>
+              &nbsp;var g = svg.append("g") <br>
+              &nbsp;  .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); <br>
+              <br>
+              &nbsp;var xScale = d3.scale.linear().range([0, innerWidth]); <br>
+              &nbsp;var yScale = d3.scale.linear().range([innerHeight, 0]); <br>
+              &nbsp;var rScale = d3.scale.sqrt(); <br>
+              <br>
+              &nbsp;function render(data){ <br>
+              &nbsp;  xScale.domain( d3.extent(data, function (d){ return d[xColumn]; })); <br>
+              &nbsp;  yScale.domain( d3.extent(data, function (d){ return d[yColumn]; })); <br>
+              &nbsp;  rScale.domain([0, d3.max(data, function (d){ return d[rColumn]; })]); <br>
+                <br>
+              &nbsp;  // Compute the size of the biggest circle as a function of peoplePerPixel. <br>
+              &nbsp;  var peopleMax = rScale.domain()[1]; <br>
+              &nbsp;  var rMin = 0; <br>
+              &nbsp;  var rMax = Math.sqrt(peopleMax / (peoplePerPixel * Math.PI)); <br>
+              &nbsp;  rScale.range([rMin, rMax]); <br>
+              <br>
+              &nbsp;  var circles = g.selectAll("circle").data(data); <br>
+              <br>
+              &nbsp;  circles.enter().append("circle"); <br>
+              <br>
+              &nbsp;  circles <br>
+              &nbsp;    .attr("cx", function (d){ return xScale(d[xColumn]); }) <br>
+              &nbsp;    .attr("cy", function (d){ return yScale(d[yColumn]); }) <br>
+              &nbsp;    .attr("r",  function (d){ return rScale(d[rColumn]); }); <br>
+              <br>
+              &nbsp;  circles.exit().remove(); <br>
+              &nbsp;} <br>
+              <br>
+              &nbsp;function type(d){ <br>
+              &nbsp;&nbsp;  d.latitude   = +d.latitude; <br>
+              &nbsp;&nbsp;   d.longitude  = +d.longitude; <br>
+              &nbsp;&nbsp;  d.population = +d.population; <br>
+              &nbsp;&nbsp;  return d; <br>
+              &nbsp;} <br>
+              <br>
+              &nbsp;d3.csv("geonames_cities100000.csv", type, render); <br>
+              <br>
+            &lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>100,000 people per pixel</li>
+					</ul>
+				</div>
+			</div>
+      <br>
+      <div id="density-transparency-css">
+				<h4>Example 2- Showing density with transparency using CSS</h4>
+				<div class="row panel">
+					<div id="example-89"></div>
+					<p>index.html</p>
+					<code>
+            &lt;style&gt;<br>
+            &nbsp;body { <br>
+            &nbsp;&nbsp;background: black; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;fill { <br>
+            &nbsp;&nbsp;rgba(255, 255, 255, 0.2); <br>
+            &nbsp;} <br>
+            &lt;/style&gt; <br>
+            <br>
+            &lt;script&gt;<br>
+              <br>
+              &nbsp;// Config vars <br>
+              &nbsp;var outerWidth  = 500;<br>
+              &nbsp;var outerHeight = 250;<br>
+              <br>
+              &nbsp;var margin = { left: -50, top: 0, right: -50, bottom: 0 }; <br>
+              <br>
+              &nbsp;var xColumn = "longitude"; <br>
+              &nbsp;var yColumn = "latitude"; <br>
+              &nbsp;var rColumn = "population"; <br>
+              <br>
+              &nbsp;var peoplePerPixel = 100000; <br>
+              <br>
+              &nbsp;var innerWidth  = outerWidth  - margin.left - margin.right; <br>
+              &nbsp;var innerHeight = outerHeight - margin.top  - margin.bottom; <br>
+              <br>
+              &nbsp;var svg = d3.select("body").append("svg") <br>
+              &nbsp;  .attr("width",  outerWidth) <br>
+              &nbsp;  .attr("height", outerHeight); <br>
+              <br>
+              &nbsp;var g = svg.append("g") <br>
+              &nbsp;  .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); <br>
+              <br>
+              &nbsp;var xScale = d3.scale.linear().range([0, innerWidth]); <br>
+              &nbsp;var yScale = d3.scale.linear().range([innerHeight, 0]); <br>
+              &nbsp;var rScale = d3.scale.sqrt(); <br>
+              <br>
+              &nbsp;function render(data){ <br>
+              &nbsp;  xScale.domain( d3.extent(data, function (d){ return d[xColumn]; })); <br>
+              &nbsp;  yScale.domain( d3.extent(data, function (d){ return d[yColumn]; })); <br>
+              &nbsp;  rScale.domain([0, d3.max(data, function (d){ return d[rColumn]; })]); <br>
+                <br>
+              &nbsp;  // Compute the size of the biggest circle as a function of peoplePerPixel. <br>
+              &nbsp;  var peopleMax = rScale.domain()[1]; <br>
+              &nbsp;  var rMin = 0; <br>
+              &nbsp;  var rMax = Math.sqrt(peopleMax / (peoplePerPixel * Math.PI)); <br>
+              &nbsp;  rScale.range([rMin, rMax]); <br>
+              <br>
+              &nbsp;  var circles = g.selectAll("circle").data(data); <br>
+              <br>
+              &nbsp;  circles.enter().append("circle"); <br>
+              <br>
+              &nbsp;  circles <br>
+              &nbsp;    .attr("cx", function (d){ return xScale(d[xColumn]); }) <br>
+              &nbsp;    .attr("cy", function (d){ return yScale(d[yColumn]); }) <br>
+              &nbsp;    .attr("r",  function (d){ return rScale(d[rColumn]); }); <br>
+              <br>
+              &nbsp;  circles.exit().remove(); <br>
+              &nbsp;} <br>
+              <br>
+              &nbsp;function type(d){ <br>
+              &nbsp;&nbsp;  d.latitude   = +d.latitude; <br>
+              &nbsp;&nbsp;   d.longitude  = +d.longitude; <br>
+              &nbsp;&nbsp;  d.population = +d.population; <br>
+              &nbsp;&nbsp;  return d; <br>
+              &nbsp;} <br>
+              <br>
+              &nbsp;d3.csv("geonames_cities100000.csv", type, render); <br>
+              <br>
+            &lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>100,000 people per pixel</li>
+					</ul>
+				</div>
+			</div>
+      <br>
+			<div id="data-temperature">
+				<h4>Example 3- Temperature in San Francisco (Scatterplot)</h4>
+				<div class="row panel">
+					<div id="example-90"></div>
 					<p>index.html</p>
 					<code>
 						&lt;script&gt;<br />
@@ -1933,9 +2097,143 @@
 						&lt;/script&gt;
 					</code>
 					<br />
-					<ul>
-						<li>1.08 million people per pixel</li>
-					</ul>
+          <ul>
+            <li>Best suited as lines</li>
+          </ul>
+				</div>
+			</div>
+      <br>
+      <div id="data-temperature-line">
+				<h4>Example 3- Temperature in San Francisco (Default Line)</h4>
+				<div class="row panel">
+					<div id="example-91"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 500; <br />
+						&nbsp;var outerHeight = 250; <br />
+						<br />
+						&nbsp;// D3 margin convention <br />
+						&nbsp;var margin = { left: 30, top: 30, right: 30, bottom: 30 }; <br />
+
+						<br />
+						&nbsp;var innerWidth = outerwidth - margin.left - margin.right; <br />
+						&nbsp;var innerHeight = outerHeight - margin.top - margin.bottom; <br />
+						&nbsp;var xColumn = "timestamp"; <br />
+						&nbsp;var yColumn = "temperature"; <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// translate inner width and height <br />
+						&nbsp;var g = svg.append("g") <br />
+						&nbsp;&nbsp;.attr("transform", "translate("+ margin.left +","+ margin.Top +")"); <br />
+						<br />
+            &nbsp;var path = g.append("path"); <br>
+            <br>
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.time.scale().range([0, innerWidth]); <br />
+						&nbsp;var yScale = d3.scale.linear().range([innerWidth, 0]); <br />
+						<br />
+						&nbsp;var line = d3.svg.line() <br>
+            &nbsp;&nbsp;.x(function(d) { return xScale(d[xColumn]); }) <br>
+            &nbsp;&nbsp;.y(function(d) { return yScale(d[yColumn]); }); <br />
+						<br />
+            &nbsp;function render(data) { <br />
+            &nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+            &nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+            &nbsp;&nbsp;path.attr("d", line(data)); // assign the line path with M, L values from data <br>
+            &nbsp;} <br>
+            <br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.timestamp = +d.timestamp; <br />
+						&nbsp;&nbsp;d.temperature  = +d.temperature; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("week_temperature_sf.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+          <ul>
+            <li>Default shown with black fills</li>
+          </ul>
+				</div>
+			</div>
+      <br>
+      <div id="data-temperature-line">
+				<h4>Example 3- Temperature in San Francisco (Line)</h4>
+				<div class="row panel">
+					<div id="example-92"></div>
+					<p>index.html</p>
+					<code>
+            &lt;style&gt; <br>
+            &nbsp;path { <br>
+            &nbsp;&nbsp;fill: none; <br>
+            &nbsp;&nbsp;stroke: black; <br>
+            &nbsp;&nbsp;stroke-width: 2px; <br>
+            &nbsp;} <br>
+            &lt;/style&gt; <br>
+            <br>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 500; <br />
+						&nbsp;var outerHeight = 250; <br />
+						<br />
+						&nbsp;// D3 margin convention <br />
+						&nbsp;var margin = { left: 30, top: 30, right: 30, bottom: 30 }; <br />
+
+						<br />
+						&nbsp;var innerWidth = outerwidth - margin.left - margin.right; <br />
+						&nbsp;var innerHeight = outerHeight - margin.top - margin.bottom; <br />
+						&nbsp;var xColumn = "timestamp"; <br />
+						&nbsp;var yColumn = "temperature"; <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// translate inner width and height <br />
+						&nbsp;var g = svg.append("g") <br />
+						&nbsp;&nbsp;.attr("transform", "translate("+ margin.left +","+ margin.Top +")"); <br />
+						<br />
+            &nbsp;var path = g.append("path"); <br>
+            <br>
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.time.scale().range([0, innerWidth]); <br />
+						&nbsp;var yScale = d3.scale.linear().range([innerWidth, 0]); <br />
+						<br />
+						&nbsp;var line = d3.svg.line() <br>
+            &nbsp;&nbsp;.x(function(d) { return xScale(d[xColumn]); }) <br>
+            &nbsp;&nbsp;.y(function(d) { return yScale(d[yColumn]); }); <br />
+						<br />
+            &nbsp;function render(data) { <br />
+            &nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+            &nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+            &nbsp;&nbsp;path.attr("d", line(data)); // assign the line path with M, L values from data <br>
+            &nbsp;} <br>
+            <br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.timestamp = +d.timestamp; <br />
+						&nbsp;&nbsp;d.temperature  = +d.temperature; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("week_temperature_sf.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
 				</div>
 			</div>
 		</div>

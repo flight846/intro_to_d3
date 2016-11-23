@@ -46,7 +46,7 @@ code {
   top: 20px;
 }
 
-.affix, 
+.affix,
 .affix-bottom {
     width: 213px;
 }
@@ -68,10 +68,24 @@ code {
 #example-77 > svg > circle {
 	fill: none;
 	stroke-width: 2px;
+}
 
+#example-89 > svg {
+	background: black;
+}
+
+#example-89 circle {
+	fill: rgba(255, 255, 255, 0.3);
+}
+
+#example-92 path {
+	fill: none;
+	stroke: black;
+	stroke-width: 2px;
+}
 
 @media (min-width:1200px) {
-  .affix, 
+  .affix,
   .affix-bottom {
     width: 263px;
   }
