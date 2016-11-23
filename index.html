@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Intro to D3</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-spy="scroll" data-target=".scrollspy">
+	<div class="container">
+		<div class="row">
+			<h1 class="text-center">Introduction to D3 <small>Ver. 3</small></h1>
+		</div>
+		<div class="col-md-2 side-menu scrollspy">
+			<ul id="nav" class="nav hidden-xs hidden-sm" data-spy="affix">
+				<li><a href="#d3-script-html">Include D3 into HTML</a></li>
+				<li><a href="#load-csv">Loading CSV data</a></li>
+				<li><a href="#parse-csv">Parsing CSV data</a></li>
+				<li><a href="#parse-csv-using-plus">Parse CSV data using "+"</a></li>
+				<li><a href="#d3-linear-scale">D3 linear scale</a></li>
+				<li><a href="#method-chaining">Method chaining</a></li>
+				<li><a href="#getter-setter">Getter/Setter functions</a></li>
+				<li><a href="#ordinal-scale">Ordinal scale</a></li>
+				<li><a href="#range-points">Range points</a></li>
+				<li><a href="#range-roundpoints">Range round points</a></li>
+				<li><a href="#constructing-dom">Constructing DOM with D3</a></li>
+				<li><a href="#d3-pipeline">Complete D3 pipeline</a></li>
+				<li><a href="#passing-scale">Passing scale as a function</a></li>
+				<li><a href="#data-binding-and-enter">Splitting data-binding and enter</a></li>
+				<li><a href="#enter-handles-data">Enter handles added data only</a></li>
+				<li><a href="#data-update">D3 update phase</a></li>
+				<li><a href="#enter-static">Using enter for static properties</a></li>
+				<li><a href="#need-to-exit">The need to exit</a></li>
+				<li><a href="#exit-phase">Exit phase</a></li>
+				<li><a href="#render-array">Rendering array of objects</a></li>
+				<li><a href="#iris-dataset">Iris dataset</a></li>
+				<li><a href="#using-extent">Using extent</a></li>
+				<li><a href="#basic-scatterplot">Basic scatter plot</a></li>
+				<li><a href="#invert-y-plot">Inverting the y range</a></li>
+				<li><a href="#config-var">Isolating config vars</a></li>
+				<li><a href="#var-x-y">Using variables for x and y-columns</a></li>
+				<li><a href="#radius-column">Adding a radius column</a></li>
+				<li><a href="#color-circles">Using CSS to color circles</a></li>
+				<li><a href="#transparent-rings">Drawing transparent rings</a></li>
+				<li><a href="#column-color">Add column color</a></li>
+				<li><a href="#fills-parameter">Using fills and parameters</a></li>
+				<li><a href="#pop-gdp">Example 1</a></li>
+				<li><a href="#log-scale">Logarithmic scale</a></li>
+				<li><a href="#pop-linear-size">Population as linear size</a></li>
+				<li><a href="#pop-log-size">Population as logarithmic size</a></li>
+				<li><a href="#sizing-inner-width-height">Sizing the inner width and height</a></li>
+				<li><a href="#margin-var">Using variables to define the margin</a></li>
+				<li><a href="#d3-margin">D3 margin convention</a></li>
+				<li><a href="#example-2">Example 2</a></li>
+			</ul>
+		</div>
+		<div class="col-md-10 col-xs-12 main-container">
+			<br />
+			<div id="d3-script-html">
+				<h4>Include D3 script into HTML</h4>
+				<div class="row panel">
+					<p>index.html</p>
+					<code>
+						&lt;head&gt;<br />
+						&nbsp;&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"&gt;&lt;/script&gt;<br />
+						&lt;/head&gt;
+					</code>
+					<br />
+					<ul>
+						<li>Place data.csv file in same directory as data.csv or run a local server and give CSV URL</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="load-csv">
+				<h4>Loading CSV data</h4>
+				<div class="row panel">
+					<p>script.js</p>
+					<code>
+						&lt;script&gt;<br />
+						&nbsp;d3.csv("data.csv", function(myArrayObjects) {<br />
+						&nbsp;&nbsp;myArrayObjects.forEach(function (d) {<br />
+						&nbsp;&nbsp;&nbsp;console.log(d.x + ", " + d.y) <br />
+						&nbsp;&nbsp;});<br />
+						&nbsp;});<br />
+						&lt;/script&gt;<br />
+						<br />
+					</code>
+					<br />
+					<p>data.csv</p>
+					<code>
+						x,y <br />
+						100,100 <br />
+						130,120 <br />
+						80,180 <br />
+						180,80 <br />
+						180,40
+					</code>
+					<br />
+					<p>console log</p>
+					<code>
+						100, 100 <br />
+						130, 120 <br />
+						80, 180 <br />
+						180, 80 <br />
+						180, 40
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="parse-csv">
+				<h4>Parsing CSV data</h4>
+				<div class="row panel">
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						&nbsp;d3.csv("data.csv", type, function(myArrayOfObjects) { <br />
+						&nbsp;&nbsp;myArrayOfObjects.forEach(function (d) { <br />
+						&nbsp;&nbsp;&nbsp;console.log(d.x + d.y); <br />
+						&nbsp;&nbsp;}); <br />
+						&nbsp;}); <br />
+						<br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.x = parseFloat(d.x); <br />
+						&nbsp;&nbsp;d.y = parseFloat(d.y); <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<p>data.csv</p>
+					<code>
+						x,y <br />
+						100,100 <br />
+						130,120 <br />
+						80,180 <br />
+						180,80 <br />
+						180,40
+					</code>
+					<br />
+					<p>console log</p>
+					<code>
+						200 <br />
+						250 <br />
+						260 <br />
+						260 <br />
+						220
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="parse-csv-using-plus">
+				<h4>Parsing CSV data using "+" in D3</h4>
+				<div class="row panel">
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						&nbsp;d3.csv("data.csv", type, function(myArrayOfObjects) { <br />
+						&nbsp;&nbsp;myArrayOfObjects.forEach(function (d) { <br />
+						&nbsp;&nbsp;&nbsp;console.log(d.x + d.y); <br />
+						&nbsp;&nbsp;}); <br />
+						&nbsp;}); <br />
+						<br />
+						&nbsp;// D3 parseFloat shortcut notation (+) <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.x = +d.x; <br />
+						&nbsp;&nbsp;d.y = +d.y; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<p>data.csv</p>
+					<code>
+						x,y <br />
+						100,100 <br />
+						130,120 <br />
+						80,180 <br />
+						180,80 <br />
+						180,40
+					</code>
+					<br />
+					<p>console log</p>
+					<code>
+						200 <br />
+						250 <br />
+						260 <br />
+						260 <br />
+						220
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="d3-linear-scale">
+				<h4>Linear scale</h4>
+				<div class="row panel">
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						&nbsp;var scale = d3.scale.linear();<br />
+						<br />
+						&nbsp;scale.domain([0, 1]); // Data space <br />
+						&nbsp;scale.range([0, 100]); // Pixel space <br />
+						<br />
+						&nbsp;console.log(scale(0)); // Prints 0 <br />
+						&nbsp;console.log(scale(0.5)); // Prints 50 <br />
+						&nbsp;console.log(scale(1)); // Prints 100 <br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>Transform numbers from data space to pixel space</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="method-chaining">
+				<h4>Method chaining</h4>
+				<div class="row panel">
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						&nbsp;var scale = d3.scale.linear();<br />
+						&nbsp;&nbsp;.domain([0, 1]); // Data space <br />
+						&nbsp;&nbsp;.range([0, 100]); // Pixel space <br />
+						<br />
+						&nbsp;console.log(scale(0)); // Prints 0 <br />
+						&nbsp;console.log(scale(0.5)); // Prints 50 <br />
+						&nbsp;console.log(scale(1)); // Prints 100 <br />
+						&lt;/script&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="getter-setter">
+				<h4>Getter/setter functions</h4>
+				<div class="row panel">
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						&nbsp;var scale = d3.scale.linear();<br />
+						&nbsp;// Setter functions <br />
+						&nbsp;&nbsp;.domain([0, 1]); <br />
+						&nbsp;&nbsp;.range([0, 100]);
+						<br />
+						<br />
+						&nbsp;// Getter functions <br />
+						&nbsp;console.log(scale.domain()); <br />
+						&nbsp;console.log(scale.range()); <br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<p>console log</p>
+					<code>
+						[0, 1] <br />
+						[0, 100]
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="ordinal-scale">
+				<h4>Ordinal scale</h4>
+				<div class="row panel">
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						&nbsp;var scale = d3.scale.ordinal();<br />
+						&nbsp;&nbsp;.domain(["A", "B", "C"]); // Data space <br />
+						&nbsp;&nbsp;.range(["Apple", "Banana", "Coconut"]); // Pixel space <br />
+						<br />
+						&nbsp;console.log(scale("A")); // Prints Apple <br />
+						&nbsp;console.log(scale("B")); // Prints Banana <br />
+						&nbsp;console.log(scale("C")); // Prints Coconut <br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>Maps data with discrete values to pixel space</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="range-points">
+				<h4>Range points</h4>
+				<div class="row panel">
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						&nbsp;var scale = d3.scale.ordinal();<br />
+						&nbsp;&nbsp;.domain(["A", "B", "C", "D"]); // Data space <br />
+						&nbsp;&nbsp;.rangePoints([0, 100]); // Pixel space <br />
+						<br />
+						&nbsp;console.log(scale("A")); // Prints 0 <br />
+						&nbsp;console.log(scale("B")); // Prints 33.33333... <br />
+						&nbsp;console.log(scale("C")); // Prints 66.66666... <br />
+						&nbsp;console.log(scale("C")); // Prints 100 <br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>Doesn't returns your with the crisp range points</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="range-roundpoints">
+				<h4>Range round points</h4>
+				<div class="row panel">
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						&nbsp;var scale = d3.scale.ordinal();<br />
+						&nbsp;&nbsp;.domain(["A", "B", "C", "D"]); // Data space <br />
+						&nbsp;&nbsp;.rangeRoundPoints([0, 100]); // Pixel space <br />
+						<br />
+						&nbsp;console.log(scale("A")); // Prints 1 <br />
+						&nbsp;console.log(scale("B")); // Prints 34 <br />
+						&nbsp;console.log(scale("C")); // Prints 67 <br />
+						&nbsp;console.log(scale("C")); // Prints 100 <br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>Returns with crisp points</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="constructing-dom">
+				<h4>Constructing DOM elements with D3</h4>
+				<div class="row panel">
+					<svg width="450" height="250">
+						<rect x="50", y="50" width="20" height="20"></rect>
+						<rect x="300", y="50" width="20" height="20"></rect>
+					</svg>
+					<p>index.html</p>
+					<code>
+						&lt;!-- using HTML --&gt;<br />
+						&lt;svg width="250" height="250"&gt; <br />
+      			&nbsp;&lt;rect x="50" y="50" width="20" height="20"&gt;&lt;/rect&gt; <br />
+    				&lt;/svg&gt; <br />
+						<br />
+						&lt;!-- using D3 --&gt;<br />
+						&lt;script&gt; <br />
+							&nbsp;var svg = d3.select("body").append("svg"); <br />
+							<br />
+							&nbsp;svg.attr("width",  250); <br />
+							&nbsp;svg.attr("height", 250); <br />
+							<br />
+							&nbsp;var rect = svg.append("rect"); <br />
+							<br />
+							&nbsp;rect.attr("x", 50); <br />
+							&nbsp;rect.attr("y", 50); <br />
+							&nbsp;rect.attr("width", 20); <br />
+							&nbsp;rect.attr("height", 20); <br />
+						&lt;/script&gt; <br />
+					</code>
+					<br />
+					<ul>
+						<li>D3 is essentially a DOM manipulation library</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="d3-pipeline">
+				<h4>Complete D3 pipeline</h4>
+				<div class="row panel">
+					<div id="example-58"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt; <br />
+						&nbsp;var data = [1, 2, 3, 4, 5];<br />
+						<br />
+						&nbsp;var scale = d3.scale.linear() <br />
+						&nbsp;&nbsp;.domain([1, 5]) // Data space <br />
+						&nbsp;&nbsp;.range([0, 200]); // Pixel space <br />
+						<br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width", 250) <br />
+						&nbsp;&nbsp;.attr("height, 250"); <br />
+						<br />
+						&nbsp;svg.selectAll("rect") <br />
+						&nbsp;&nbsp;&nbsp;.data(data) <br />
+						&nbsp;&nbsp;.enter().append("rect") <br />
+						&nbsp;&nbsp;&nbsp;.attr("x", function (d) { return scale(d); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("y", 50) <br />
+						&nbsp;&nbsp;&nbsp;.attr("width", 20) <br />
+						&nbsp;&nbsp;&nbsp;.attr("height", 20); <br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>Data-binding in D3</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="passing-scale">
+				<h4>Passing the scale as a function</h4>
+				<div class="row panel">
+					<div id="example-59"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt; <br />
+						&nbsp;var data = [1, 2, 3, 4, 5];<br />
+						<br />
+						&nbsp;var scale = d3.scale.linear() <br />
+						&nbsp;&nbsp;.domain([1, 5]) // Data space <br />
+						&nbsp;&nbsp;.range([0, 200]); // Pixel space <br />
+						<br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width", 250) <br />
+						&nbsp;&nbsp;.attr("height, 250"); <br />
+						<br />
+						&nbsp;svg.selectAll("rect") <br />
+						&nbsp;&nbsp;&nbsp;.data(data) <br />
+						&nbsp;&nbsp;.enter().append("rect") <br />
+						&nbsp;&nbsp;&nbsp;.attr("x", scale) <br />
+						&nbsp;&nbsp;&nbsp;.attr("y", 50) <br />
+						&nbsp;&nbsp;&nbsp;.attr("width", 20) <br />
+						&nbsp;&nbsp;&nbsp;.attr("height", 20); <br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>.attr("x", scale) instead of .attr("x", function (d) { return scale(d); })</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="data-binding-and-enter">
+				<h4>Splitting data-binding and enter</h4>
+				<div class="row panel">
+					<div id="example-60"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt; <br />
+						&nbsp;var data = [1, 2, 3, 4, 5]; <br />
+						<br />
+						&nbsp;var scale = d3.scale.linear() <br />
+						&nbsp;&nbsp;.domain([1, 5]) // data space <br />
+						&nbsp;&nbsp;.range([0, 200]); // pixel space <br />
+						<br />
+						&nbsp;var svg = d3.select("#example-60").append("svg") <br />
+						&nbsp;&nbsp;.attr("width", 250) <br />
+						&nbsp;&nbsp;.attr("height", 250); <br />
+						<br />
+						&nbsp;// bind data to all rects attached<br />
+						&nbsp;var rects = svg.selectAll("rect").data(data); <br />
+						<br />
+						&nbsp;rects.enter().append("rect") <br />
+						&nbsp;&nbsp;.attr("x", scale) <br />
+						&nbsp;&nbsp;.attr("y", 50) <br />
+						&nbsp;&nbsp;.attr("width", 20) <br />
+						&nbsp;&nbsp;.attr("width", 20); <br />
+						&lt;/script&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="enter-handles-data">
+				<h4>Enter handles added data only</h4>
+				<div class="row panel">
+					<div id="example-61"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt; <br />
+						<br />
+						&nbsp;var scale = d3.scale.linear() <br />
+						&nbsp;&nbsp;.domain([1, 5]) // data space <br />
+						&nbsp;&nbsp;.range([0, 200]); // pixel space <br />
+						<br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width", 250) <br />
+						&nbsp;&nbsp;.attr("height", 250); <br />
+						<br />
+						&nbsp;// bind data to all rects attached<br />
+						&nbsp;function render(data, color) { <br />
+						&nbsp;&nbsp;var rects = svg.selectAll("rect").data(data); <br />
+						<br />
+						&nbsp;&nbsp;rects.enter().append("rect") <br />
+						&nbsp;&nbsp;&nbsp;.attr("x", scale) <br />
+						&nbsp;&nbsp;&nbsp;.attr("y", 50) <br />
+						&nbsp;&nbsp;&nbsp;.attr("width", 20) <br />
+						&nbsp;&nbsp;&nbsp;.attr("width", 20) <br />
+						&nbsp;&nbsp;&nbsp;.attr("fill", color); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;render([1, 2, 3], "red"); <br />
+						&nbsp;render([1, 2, 3, 4, 5], "blue"); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>Enter does not update data</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="data-update">
+				<h4>D3 update phase</h4>
+				<div class="row panel">
+					<div id="example-62"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt; <br />
+						<br />
+						&nbsp;var scale = d3.scale.linear() <br />
+						&nbsp;&nbsp;.domain([1, 5]) // data space <br />
+						&nbsp;&nbsp;.range([0, 200]); // pixel space <br />
+						<br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width", 250) <br />
+						&nbsp;&nbsp;.attr("height", 250); <br />
+						<br />
+						&nbsp;function render(data, color) { <br />
+						&nbsp;&nbsp;// binds data <br />
+						&nbsp;&nbsp;var rects = svg.selectAll("rect").data(data); <br />
+						<br />
+						&nbsp;&nbsp;// Enter <br />
+						&nbsp;&nbsp;rects.enter().append("rect"); <br />
+						<br />
+						&nbsp;&nbsp;// Update <br />
+						&nbsp;&nbsp;rects <br />
+						&nbsp;&nbsp;&nbsp;.attr("x", scale) <br />
+						&nbsp;&nbsp;&nbsp;.attr("y", 50) <br />
+						&nbsp;&nbsp;&nbsp;.attr("width", 20) <br />
+						&nbsp;&nbsp;&nbsp;.attr("width", 20) <br />
+						&nbsp;&nbsp;&nbsp;.attr("fill", color); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;render([1, 2, 3], "red"); <br />
+						&nbsp;render([1, 2, 3, 4, 5], "blue"); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>Enter does not update data</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="enter-static">
+				<h4>Using enter for static properties</h4>
+				<div class="row panel">
+					<div id="example-63"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt; <br />
+						<br />
+						&nbsp;var scale = d3.scale.linear() <br />
+						&nbsp;&nbsp;.domain([1, 5]) // data space <br />
+						&nbsp;&nbsp;.range([0, 200]); // pixel space <br />
+						<br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width", 250) <br />
+						&nbsp;&nbsp;.attr("height", 250); <br />
+						<br />
+						&nbsp;function render(data, color) { <br />
+						&nbsp;&nbsp;// binds data <br />
+						&nbsp;&nbsp;var rects = svg.selectAll("rect").data(data); <br />
+						<br />
+						&nbsp;&nbsp;// Enter <br />
+						&nbsp;&nbsp;rects.enter().append("rect") <br />
+						&nbsp;&nbsp;&nbsp;.attr("y", 50) <br />
+						&nbsp;&nbsp;&nbsp;.attr("width", 20) <br />
+						&nbsp;&nbsp;&nbsp;.attr("width", 20); <br />
+						<br />
+						&nbsp;&nbsp;// Update phase<br />
+						&nbsp;&nbsp;rects <br />
+						&nbsp;&nbsp;&nbsp;.attr("x", scale) <br />
+						&nbsp;&nbsp;&nbsp;.attr("fill", color); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;render([1, 2, 3], "red"); <br />
+						&nbsp;render([1, 2, 3, 4, 5], "blue"); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+				</div>
+			</div>
+			<br />
+			<div id="need-to-exit">
+				<h4>The need to exit</h4>
+				<div class="row panel">
+					<div id="example-64"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt; <br />
+						<br />
+						&nbsp;var scale = d3.scale.linear() <br />
+						&nbsp;&nbsp;.domain([1, 5]) // data space <br />
+						&nbsp;&nbsp;.range([0, 200]); // pixel space <br />
+						<br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width", 250) <br />
+						&nbsp;&nbsp;.attr("height", 250); <br />
+						<br />
+						&nbsp;function render(data, color) { <br />
+						&nbsp;&nbsp;// binds data <br />
+						&nbsp;&nbsp;var rects = svg.selectAll("rect").data(data); <br />
+						<br />
+						&nbsp;&nbsp;// Enter <br />
+						&nbsp;&nbsp;rects.enter().append("rect") <br />
+						&nbsp;&nbsp;&nbsp;.attr("y", 50) <br />
+						&nbsp;&nbsp;&nbsp;.attr("width", 20) <br />
+						&nbsp;&nbsp;&nbsp;.attr("width", 20); <br />
+						<br />
+						&nbsp;&nbsp;// Update phase<br />
+						&nbsp;&nbsp;rects <br />
+						&nbsp;&nbsp;&nbsp;.attr("x", scale) <br />
+						&nbsp;&nbsp;&nbsp;.attr("fill", color); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;render([1, 2, 2.5], "red"); <br />
+						&nbsp;render([1, 2, 3, 4, 5], "blue"); <br />
+						&nbsp;render([1, 2], "green"); // should remove the three blues <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+				</div>
+			</div>
+			<br />
+			<div id="exit-phase">
+				<h4>Exit phase</h4>
+				<div class="row panel">
+					<div id="example-65"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt; <br />
+						<br />
+						&nbsp;var scale = d3.scale.linear() <br />
+						&nbsp;&nbsp;.domain([1, 5]) // data space <br />
+						&nbsp;&nbsp;.range([0, 200]); // pixel space <br />
+						<br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width", 250) <br />
+						&nbsp;&nbsp;.attr("height", 250); <br />
+						<br />
+						&nbsp;function render(data, color) { <br />
+						&nbsp;&nbsp;// binds data <br />
+						&nbsp;&nbsp;var rects = svg.selectAll("rect").data(data); <br />
+						<br />
+						&nbsp;&nbsp;// Enter <br />
+						&nbsp;&nbsp;rects.enter().append("rect") <br />
+						&nbsp;&nbsp;&nbsp;.attr("y", 50) <br />
+						&nbsp;&nbsp;&nbsp;.attr("width", 20) <br />
+						&nbsp;&nbsp;&nbsp;.attr("width", 20); <br />
+						<br />
+						&nbsp;&nbsp;// Update phase<br />
+						&nbsp;&nbsp;rects <br />
+						&nbsp;&nbsp;&nbsp;.attr("x", scale) <br />
+						&nbsp;&nbsp;&nbsp;.attr("fill", color); <br />
+						<br />
+						&nbsp;&nbsp;// Exit <br />
+						&nbsp;&nbsp;rects <br />
+						&nbsp;&nbsp;&nbsp;.exit() <br />
+						&nbsp;&nbsp;&nbsp;.remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;render([1, 2, 2.5], "red"); <br />
+						&nbsp;render([1, 2, 3, 4, 5], "blue"); <br />
+						&nbsp;render([1, 2], "green");<br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+				</div>
+			</div>
+			<br />
+			<div id="render-array">
+				<h4>Rendering arrays of objects</h4>
+				<div class="row panel">
+					<div id="example-66">
+						<img src=http://i.imgur.com/dSmYNAF.png alt="" />
+					</div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt; <br />
+						<br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  250) <br />
+						&nbsp;&nbsp;.attr("height", 250); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;// Bind data <br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;// Enter <br />
+						&nbsp;&nbsp;circles.enter().append("circle") <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", 10); <br />
+						<br />
+						&nbsp;&nbsp;// Update <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return d.x; }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return d.y; }); <br />
+						<br />
+						&nbsp;&nbsp;// Exit <br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;var myArrayOfObjects = [ <br />
+						&nbsp;&nbsp;{ x: 100, y: 100}, <br />
+						&nbsp;&nbsp;{ x: 130, y: 120}, <br />
+						&nbsp;&nbsp;{ x: 80 , y: 180}, <br />
+						&nbsp;&nbsp;{ x: 180, y: 80 }, <br />
+						&nbsp;&nbsp;{ x: 180, y: 40 } <br />
+						&nbsp;]; <br />
+						<br />
+						&nbsp;render(myArrayOfObjects); <br />
+						<br />
+						&lt;/script;&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="render-parse-csv-array">
+				<h4>Rendering a parsed CSV file</h4>
+				<div class="row panel">
+					<div id="example-67">
+						<img src=http://i.imgur.com/dSmYNAF.png alt="" />
+					</div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt; <br />
+						<br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  250) <br />
+						&nbsp;&nbsp;.attr("height", 250); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;// Bind data <br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;// Enter <br />
+						&nbsp;&nbsp;circles.enter().append("circle") <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", 10); <br />
+						<br />
+						&nbsp;&nbsp;// Update <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return d.x; }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return d.y; }); <br />
+						<br />
+						&nbsp;&nbsp;// Exit <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.exit() <br />
+						&nbsp;&nbsp;&nbsp;.remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.x = +d.x; <br />
+						&nbsp;&nbsp;d.y = +d.y; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;d3.csv("data.csv", type, function (myArrayOfObjects) { <br />
+						&nbsp;&nbsp;render(myArrayOfObjects); <br />
+						&nbsp;}); <br />
+						<br />
+						&lt;/script;&gt;
+					</code>
+					<br />
+					<p>data.csv</p>
+					<code>
+						x,y <br />
+						100,100 <br />
+						130,120 <br />
+						80,180 <br />
+						180,80 <br />
+						180,40 <br />
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="iris-dataset">
+				<h4>Introducing the iris dataset</h4>
+				<div class="row panel">
+					<div id="example-68"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt; <br />
+						&nbsp;// Convert to float <br />
+						&nbsp;function type(d) {<br />
+						&nbsp;&nbsp;d.sepal_length = +d.sepal_length;<br />
+						&nbsp;&nbsp;d.sepal_width  = +d.sepal_width;<br />
+						&nbsp;&nbsp;d.petal_length = +d.petal_length;<br />
+						&nbsp;&nbsp;d.petal_width  = +d.petal_width;<br />
+						&nbsp;&nbsp;return d;<br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// return the min and max value <br />
+						&nbsp;d3.csv("iris.csv", type, function (data){<br />
+						&nbsp;&nbsp;var min = d3.min(data, function (d){ return d.sepal_length; });<br />
+						&nbsp;&nbsp;var max = d3.max(data, function (d){ return d.sepal_length; });<br />
+						&nbsp;&nbsp;console.log([min, max]);<br />
+						&nbsp;}); <br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<p>console log</p>
+					<code>
+						0: 4.3 <br />
+						1: 7.9
+					</code>
+					<br />
+					<ul>
+						<li>D3 min and max</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="using-extent">
+				<h4>Using extent</h4>
+				<div class="row panel">
+					<div id="example-69"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt; <br />
+						&nbsp;// Convert to float <br />
+						&nbsp;function type(d) {<br />
+						&nbsp;&nbsp;d.sepal_length = +d.sepal_length;<br />
+						&nbsp;&nbsp;d.sepal_width  = +d.sepal_width;<br />
+						&nbsp;&nbsp;d.petal_length = +d.petal_length;<br />
+						&nbsp;&nbsp;d.petal_width  = +d.petal_width;<br />
+						&nbsp;&nbsp;return d;<br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// return the min and max value <br />
+						&nbsp;d3.csv("iris.csv", type, function (data){ <br />
+        		&nbsp;&nbsp;var extent = d3.extent(data, function (d){ return d.sepal_length; }); <br />
+        		&nbsp;&nbsp;console.log(extent); <br />
+      			&nbsp;}); <br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<p>console log</p>
+					<code>
+						0: 4.3 <br />
+						1: 7.9
+					</code>
+					<br />
+					<ul>
+						<li>Computes the min & max in one function call</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="basic-scatterplot">
+				<h4>Basic scatter plot</h4>
+				<div class="row panel">
+					<div id="example-70"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  250) <br />
+						&nbsp;&nbsp;.attr("height", 250); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.linear().range([0, 250]); <br />
+						&nbsp;var yScale = d3.scale.linear().range([0, 250]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d.sepal_length; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d.petal_length; })); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle").attr("r", 10); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d.sepal_length); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d.petal_length); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.sepal_length = +d.sepal_length; <br />
+						&nbsp;&nbsp;d.sepal_width  = +d.sepal_width; <br />
+						&nbsp;&nbsp;d.petal_length = +d.petal_length; <br />
+						&nbsp;&nbsp;d.petal_width  = +d.petal_width;  <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("iris.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+				</div>
+			</div>
+			<br />
+			<div id="invert-y-plot">
+				<h4>Inverting the y range</h4>
+				<div class="row panel">
+					<div id="example-71"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  250) <br />
+						&nbsp;&nbsp;.attr("height", 250); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.linear().range([0, 250]); <br />
+						&nbsp;var yScale = d3.scale.linear().range([250, 0]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d.sepal_length; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d.petal_length; })); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle").attr("r", 10); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d.sepal_length); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d.petal_length); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.sepal_length = +d.sepal_length; <br />
+						&nbsp;&nbsp;d.sepal_width  = +d.sepal_width; <br />
+						&nbsp;&nbsp;d.petal_length = +d.petal_length; <br />
+						&nbsp;&nbsp;d.petal_width  = +d.petal_width;  <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("iris.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="config-var">
+				<h4>Isolating configurable variables</h4>
+				<div class="row panel">
+					<div id="example-72"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var circleRadius = 5; <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.linear().range([0, 250]); <br />
+						&nbsp;var yScale = d3.scale.linear().range([250, 0]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d.sepal_length; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d.petal_length; })); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle").attr("r", circleRadius); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d.sepal_length); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d.petal_length); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.sepal_length = +d.sepal_length; <br />
+						&nbsp;&nbsp;d.sepal_width  = +d.sepal_width; <br />
+						&nbsp;&nbsp;d.petal_length = +d.petal_length; <br />
+						&nbsp;&nbsp;d.petal_width  = +d.petal_width;  <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("iris.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="var-x-y">
+				<h4>Using variables for x and y-columns</h4>
+				<div class="row panel">
+					<div id="example-73"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var xColumn = "sepal_length"; <br />
+						&nbsp;var yColumn = "petal_length"; <br />
+						&nbsp;var circleRadius = 5; <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.linear().range([0, 250]); <br />
+						&nbsp;var yScale = d3.scale.linear().range([250, 0]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle").attr("r", circleRadius); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.sepal_length = +d.sepal_length; <br />
+						&nbsp;&nbsp;d.sepal_width  = +d.sepal_width; <br />
+						&nbsp;&nbsp;d.petal_length = +d.petal_length; <br />
+						&nbsp;&nbsp;d.petal_width  = +d.petal_width;  <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("iris.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="radius-column">
+				<h4>Adding a radius column</h4>
+				<div class="row panel">
+					<div id="example-74"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var rMin = 5; <br />
+						&nbsp;var rMax = 20; <br />
+						&nbsp;var xColumn = "sepal_length"; <br />
+						&nbsp;var yColumn = "petal_length"; <br />
+						&nbsp;var rColumn = "sepal_width"; <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.linear().range([0, outerWidth]); <br />
+						&nbsp;var yScale = d3.scale.linear().range([outerHeight, 0]); <br />
+						&nbsp;var rScale = d3.scale.linear().range([rMin, rMax]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						&nbsp;&nbsp;rScale.domain(d3.extent(data, function (d) { return d[rColumn]; })); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", function (d){ return rScale(d[rColumn]); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.sepal_length = +d.sepal_length; <br />
+						&nbsp;&nbsp;d.sepal_width  = +d.sepal_width; <br />
+						&nbsp;&nbsp;d.petal_length = +d.petal_length; <br />
+						&nbsp;&nbsp;d.petal_width  = +d.petal_width;  <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("iris.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="color-circles">
+				<h4>Using CSS to color circles</h4>
+				<div class="row panel">
+					<div id="example-75"></div>
+					<p>index.html</p>
+					<code>
+						&lt;style&gt; <br />
+						&nbsp;circle { <br />
+						&nbsp;&nbsp;fill: blue; <br />
+						&nbsp;} <br />
+						&lt;/style&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="transparent-rings">
+				<h4>Drawing transparent rings</h4>
+				<div class="row panel">
+					<div id="example-76"></div>
+					<p>index.html</p>
+					<code>
+						&lt;style&gt; <br />
+						&nbsp;circle { <br />
+						&nbsp;&nbsp;fill: blue; <br />
+						&nbsp;&nbsp;stroke: blue; <br />
+						&nbsp;&nbsp;stroke-width: 2px; <br />
+						&nbsp;} <br />
+						&lt;/style&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="column-color">
+				<h4>Adding column color</h4>
+				<div class="row panel">
+					<div id="example-77"></div>
+					<p>index.html</p>
+					<code>
+						&lt;style&gt; <br />
+						&nbsp;circle { <br />
+						&nbsp;&nbsp;fill: none; <br />
+						&nbsp;&nbsp;stroke-width: 2px; <br />
+						&nbsp;} <br />
+						&lt;/style&gt; <br />
+						<br />
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var rMin = 5; <br />
+						&nbsp;var rMax = 20; <br />
+						&nbsp;var xColumn = "sepal_length"; <br />
+						&nbsp;var yColumn = "petal_length"; <br />
+						&nbsp;var rColumn = "sepal_width"; <br />
+						&nbsp;var colorColumn = "species"; <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.linear().range([0, outerWidth]); <br />
+						&nbsp;var yScale = d3.scale.linear().range([outerHeight, 0]); <br />
+						&nbsp;var rScale = d3.scale.linear().range([rMin, rMax]); <br />
+						&nbsp;var colorScale = d3.scale.category10(); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						&nbsp;&nbsp;rScale.domain(d3.extent(data, function (d) { return d[rColumn]; })); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", function (d){ return rScale(d[rColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("stroke", function (d){ return colorScale(d[colorColumn]); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.sepal_length = +d.sepal_length; <br />
+						&nbsp;&nbsp;d.sepal_width  = +d.sepal_width; <br />
+						&nbsp;&nbsp;d.petal_length = +d.petal_length; <br />
+						&nbsp;&nbsp;d.petal_width  = +d.petal_width;  <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("iris.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="fills-parameter">
+				<h4>Using fills and tweaking parameters</h4>
+				<div class="row panel">
+					<div id="example-78"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var rMin = 1; <br />
+						&nbsp;var rMax = 6; <br />
+						&nbsp;var xColumn = "sepal_length"; <br />
+						&nbsp;var yColumn = "petal_length"; <br />
+						&nbsp;var rColumn = "sepal_width"; <br />
+						&nbsp;var colorColumn = "species"; <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.linear().range([0, outerWidth]); <br />
+						&nbsp;var yScale = d3.scale.linear().range([outerHeight, 0]); <br />
+						&nbsp;var rScale = d3.scale.linear().range([rMin, rMax]); <br />
+						&nbsp;var colorScale = d3.scale.category10(); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						&nbsp;&nbsp;rScale.domain(d3.extent(data, function (d) { return d[rColumn]; })); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", function (d){ return rScale(d[rColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("fill", function (d){ return colorScale(d[colorColumn]); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.sepal_length = +d.sepal_length; <br />
+						&nbsp;&nbsp;d.sepal_width  = +d.sepal_width; <br />
+						&nbsp;&nbsp;d.petal_length = +d.petal_length; <br />
+						&nbsp;&nbsp;d.petal_width  = +d.petal_width;  <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("iris.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="pop-gdp">
+				<h4>Example 1- Population and GDP</h4>
+				<div class="row panel">
+					<div id="example-79"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var xColumn = "population"; <br />
+						&nbsp;var yColumn = "gdp"; <br />
+						&nbsp;var circleRadius = 2; <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.linear().range([0, outerWidth]); <br />
+						&nbsp;var yScale = d3.scale.linear().range([outerHeight, 0]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", circleRadius); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.population = +d.population; <br />
+						&nbsp;&nbsp;d.gdp  = +d.gdp; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("countries_population_GDP.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="log-scale">
+				<h4>Logarithmic scales</h4>
+				<div class="row panel">
+					<div id="example-80"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var xColumn = "population"; <br />
+						&nbsp;var yColumn = "gdp"; <br />
+						&nbsp;var circleRadius = 2; <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.log().range([0, outerWidth]); <br />
+						&nbsp;var yScale = d3.scale.log().range([outerHeight, 0]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", circleRadius); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.population = +d.population; <br />
+						&nbsp;&nbsp;d.gdp  = +d.gdp; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("countries_population_GDP.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="pop-linear-size">
+				<h4>Population as linear size</h4>
+				<div class="row panel">
+					<div id="example-81"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var rMin = 1; <br />
+						&nbsp;var rMax = 6; <br />
+						&nbsp;var xColumn = "population"; <br />
+						&nbsp;var yColumn = "gdp"; <br />
+						&nbsp;var rColumn = "population" <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.log().range([0, outerWidth]); <br />
+						&nbsp;var yScale = d3.scale.log().range([outerHeight, 0]); <br />
+						&nbsp;var rScale = d3.scale.linear().range([rMin, rMax]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						&nbsp;&nbsp;rScale.domain(d3.extent(data, function (d) { return d[rColumn]; })); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", function (d) { return rScale(d[rColumn]); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.population = +d.population; <br />
+						&nbsp;&nbsp;d.gdp  = +d.gdp; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("countries_population_GDP.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+				</div>
+			</div>
+			<br />
+			<div id="pop-log-size">
+				<h4>Population as logarithmic size</h4>
+				<div class="row panel">
+					<div id="example-82"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var rMin = 1; <br />
+						&nbsp;var rMax = 6; <br />
+						&nbsp;var xColumn = "population"; <br />
+						&nbsp;var yColumn = "gdp"; <br />
+						&nbsp;var rColumn = "population" <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.log().range([0, outerWidth]); <br />
+						&nbsp;var yScale = d3.scale.log().range([outerHeight, 0]); <br />
+						&nbsp;var rScale = d3.scale.log().range([rMin, rMax]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						&nbsp;&nbsp;rScale.domain(d3.extent(data, function (d) { return d[rColumn]; })); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", function (d) { return rScale(d[rColumn]); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.population = +d.population; <br />
+						&nbsp;&nbsp;d.gdp  = +d.gdp; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("countries_population_GDP.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>Not quite right.</li>
+						<li>How many people per pixel?</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="pop-true-size">
+				<h4>Population true size using scale.sqrt()</h4>
+				<div class="row panel">
+					<div id="example-83"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var rMin = 0; <br />
+						&nbsp;var rMax = 20; <br />
+						&nbsp;var xColumn = "population"; <br />
+						&nbsp;var yColumn = "gdp"; <br />
+						&nbsp;var rColumn = "population" <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.log().range([0, outerWidth]); <br />
+						&nbsp;var yScale = d3.scale.log().range([outerHeight, 0]); <br />
+						&nbsp;var rScale = d3.scale.sqrt().range([rMin, rMax]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						&nbsp;&nbsp;rScale.domain([0, d3.max(data, function (d) { return d[rColumn]; })]); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", function (d) { return rScale(d[rColumn]); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.population = +d.population; <br />
+						&nbsp;&nbsp;d.gdp  = +d.gdp; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("countries_population_GDP.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>1.08 million people per pixel</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="sizing-inner-width-height">
+				<h4>Sizing the inner width and height</h4>
+				<div class="row panel">
+					<div id="example-84"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var innerWidth = outerwidth - 30; <br />
+						&nbsp;var innerHeight = outerHeight - 30; <br />
+						&nbsp;var rMin = 0; <br />
+						&nbsp;var rMax = 20; <br />
+						&nbsp;var xColumn = "population"; <br />
+						&nbsp;var yColumn = "gdp"; <br />
+						&nbsp;var rColumn = "population" <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.log().range([0, innerWidth]); <br />
+						&nbsp;var yScale = d3.scale.log().range([innerWidth, 0]); <br />
+						&nbsp;var rScale = d3.scale.sqrt().range([rMin, rMax]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						&nbsp;&nbsp;rScale.domain([0, d3.max(data, function (d) { return d[rColumn]; })]); <br />
+						<br />
+						&nbsp;&nbsp;var circles = svg.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", function (d) { return rScale(d[rColumn]); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.population = +d.population; <br />
+						&nbsp;&nbsp;d.gdp  = +d.gdp; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("countries_population_GDP.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>1.08 million people per pixel</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="translate-using-g">
+				<h4>Translating the inner visualisation using g</h4>
+				<div class="row panel">
+					<div id="example-85"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var innerWidth = outerwidth - 30 - 30; <br />
+						&nbsp;var innerHeight = outerHeight - 30 - 30; <br />
+						&nbsp;var rMin = 0; <br />
+						&nbsp;var rMax = 20; <br />
+						&nbsp;var xColumn = "population"; <br />
+						&nbsp;var yColumn = "gdp"; <br />
+						&nbsp;var rColumn = "population" <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// translate inner width and height <br />
+						&nbsp;var g = svg.append("g") <br />
+						&nbsp;&nbsp;.attr("transform", "translate(30, 30)"); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.log().range([0, innerWidth]); <br />
+						&nbsp;var yScale = d3.scale.log().range([innerWidth, 0]); <br />
+						&nbsp;var rScale = d3.scale.sqrt().range([rMin, rMax]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						&nbsp;&nbsp;rScale.domain([0, d3.max(data, function (d) { return d[rColumn]; })]); <br />
+						<br />
+						&nbsp;&nbsp;var circles = g.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", function (d) { return rScale(d[rColumn]); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.population = +d.population; <br />
+						&nbsp;&nbsp;d.gdp  = +d.gdp; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("countries_population_GDP.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>1.08 million people per pixel</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="margin-var">
+				<h4>Using variables to define the margin</h4>
+				<div class="row panel">
+					<div id="example-86"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						<br />
+						&nbsp;var marginTop = 30; <br />
+						&nbsp;var marginRight = 30; <br />
+						&nbsp;var marginBottom = 30; <br />
+						&nbsp;var marginLeft = 30; <br />
+						<br />
+						&nbsp;var innerWidth = outerwidth - marginLeft - marginRight; <br />
+						&nbsp;var innerHeight = outerHeight - marginTop - marginBottom; <br />
+						&nbsp;var rMin = 0; <br />
+						&nbsp;var rMax = 20; <br />
+						&nbsp;var xColumn = "population"; <br />
+						&nbsp;var yColumn = "gdp"; <br />
+						&nbsp;var rColumn = "population" <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// translate inner width and height <br />
+						&nbsp;var g = svg.append("g") <br />
+						&nbsp;&nbsp;.attr("transform", "translate("+ marginLeft +","+ marginTop +")"); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.log().range([0, innerWidth]); <br />
+						&nbsp;var yScale = d3.scale.log().range([innerWidth, 0]); <br />
+						&nbsp;var rScale = d3.scale.sqrt().range([rMin, rMax]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						&nbsp;&nbsp;rScale.domain([0, d3.max(data, function (d) { return d[rColumn]; })]); <br />
+						<br />
+						&nbsp;&nbsp;var circles = g.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", function (d) { return rScale(d[rColumn]); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.population = +d.population; <br />
+						&nbsp;&nbsp;d.gdp  = +d.gdp; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("countries_population_GDP.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>1.08 million people per pixel</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="d3-margin">
+				<h4>D3 margin convention using objects</h4>
+				<div class="row panel">
+					<div id="example-87"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 300; <br />
+						&nbsp;var outerHeight = 250; <br />
+						<br />
+						&nbsp;// D3 margin convention <br />
+						&nbsp;var margin = { left: 30, top: 30, right: 30, bottom: 30 }; <br />
+
+						<br />
+						&nbsp;var innerWidth = outerwidth - margin.left - margin.right; <br />
+						&nbsp;var innerHeight = outerHeight - margin.top - margin.bottom; <br />
+						&nbsp;var rMin = 0; <br />
+						&nbsp;var rMax = 20; <br />
+						&nbsp;var xColumn = "population"; <br />
+						&nbsp;var yColumn = "gdp"; <br />
+						&nbsp;var rColumn = "population" <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// translate inner width and height <br />
+						&nbsp;var g = svg.append("g") <br />
+						&nbsp;&nbsp;.attr("transform", "translate("+ margin.left +","+ margin.Top +")"); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.scale.log().range([0, innerWidth]); <br />
+						&nbsp;var yScale = d3.scale.log().range([innerWidth, 0]); <br />
+						&nbsp;var rScale = d3.scale.sqrt().range([rMin, rMax]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn]; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						&nbsp;&nbsp;rScale.domain([0, d3.max(data, function (d) { return d[rColumn]; })]); <br />
+						<br />
+						&nbsp;&nbsp;var circles = g.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("r", function (d) { return rScale(d[rColumn]); }); <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.population = +d.population; <br />
+						&nbsp;&nbsp;d.gdp  = +d.gdp; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("countries_population_GDP.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>1.08 million people per pixel</li>
+					</ul>
+				</div>
+			</div>
+			<br />
+			<div id="d3-margin">
+				<h4>Example 2- Temperature in San Francisco</h4>
+				<div class="row panel">
+					<div id="example-88"></div>
+					<p>index.html</p>
+					<code>
+						&lt;script&gt;<br />
+						<br />
+						&nbsp;// config vars <br />
+						&nbsp;var outerWidth = 500; <br />
+						&nbsp;var outerHeight = 250; <br />
+						&nbsp;var circleRadius = 3; <br />
+						<br />
+						&nbsp;// D3 margin convention <br />
+						&nbsp;var margin = { left: 30, top: 30, right: 30, bottom: 30 }; <br />
+
+						<br />
+						&nbsp;var innerWidth = outerwidth - margin.left - margin.right; <br />
+						&nbsp;var innerHeight = outerHeight - margin.top - margin.bottom; <br />
+						&nbsp;var xColumn = "timestamp"; <br />
+						&nbsp;var yColumn = "temperature"; <br />
+						<br />
+						&nbsp;// create SVG <br />
+						&nbsp;var svg = d3.select("body").append("svg") <br />
+						&nbsp;&nbsp;.attr("width",  outerWidth) <br />
+						&nbsp;&nbsp;.attr("height", outerHeight); <br />
+						<br />
+						&nbsp;// translate inner width and height <br />
+						&nbsp;var g = svg.append("g") <br />
+						&nbsp;&nbsp;.attr("transform", "translate("+ margin.left +","+ margin.Top +")"); <br />
+						<br />
+						&nbsp;// set x, y scale range <br />
+						&nbsp;var xScale = d3.time.scale().range([0, innerWidth]); <br />
+						&nbsp;var yScale = d3.scale.linear().range([innerWidth, 0]); <br />
+						<br />
+						&nbsp;function render(data) { <br />
+						&nbsp;&nbsp;xScale.domain(d3.extent(data, function (d) { return d[xColumn].date; })); <br />
+						&nbsp;&nbsp;yScale.domain(d3.extent(data, function (d) { return d[yColumn]; })); <br />
+						<br />
+						&nbsp;&nbsp;var circles = g.selectAll("circle").data(data); <br />
+						<br />
+						&nbsp;&nbsp;circles.enter().append("circle"); <br />
+						&nbsp;&nbsp; <br />
+						&nbsp;&nbsp;circles <br />
+						&nbsp;&nbsp;&nbsp;.attr("cx", function (d){ return xScale(d[xColumn]); }) <br />
+						&nbsp;&nbsp;&nbsp;.attr("cy", function (d){ return yScale(d[yColumn]); }) <br />
+						<br />
+						&nbsp;&nbsp;circles.exit().remove(); <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// parse float <br />
+						&nbsp;function type(d) { <br />
+						&nbsp;&nbsp;d.timestamp = +d.timestamp; <br />
+						&nbsp;&nbsp;d.temperature  = +d.temperature; <br />
+						&nbsp;&nbsp;return d; <br />
+						&nbsp;} <br />
+						<br />
+						&nbsp;// render <br />
+						&nbsp;d3.csv("week_temperature_sf.csv", type, render); <br />
+						<br />
+						&lt;/script&gt;
+					</code>
+					<br />
+					<ul>
+						<li>1.08 million people per pixel</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
