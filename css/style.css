@@ -122,6 +122,10 @@ footer p {
 	shape-rendering: crispEdges;
 }
 
+.axis .label {
+	font-size: 26px;
+}
+
 @media (min-width:1200px) {
   .affix,
   .affix-bottom {

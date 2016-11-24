@@ -61,6 +61,7 @@
         <li><a href="#add-axes">Adding axes</a></li>
         <li><a href="#customising-axes">Customising Axes</a></li>
         <li><a href="#horizontal-barchart">Horizontal bar chart</a></li>
+        <li><a href="#axis-label">Axis label</a></li>
 			</ul>
 		</div>
 		<div class="col-md-10 col-xs-12 main-container">
@@ -2607,6 +2608,55 @@
             <li>Can show more bar labels than vertical bars</li>
             <li>Swap (x, y), (width, height) throughout</li>
           </ul>
+        </div>
+      </div>
+      <br>
+      <div id="axis-label">
+        <h4>Axis label</h4>
+        <div class="row panel">
+          <div id="example-98"></div>
+          <p>index.html</p>
+          <code>
+            &lt;style&gt;<br>
+            &nbsp;.axis text { <br>
+            &nbsp;	font: 16px; <br>
+            &nbsp;	font-family: "helvetica-neue", helvetica, sans-serif; <br>
+            &nbsp;} <br>
+            &nbsp;.axis .label { <br>
+            &nbsp;  font-size: 26px; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;.axis path, .axis line { <br>
+            &nbsp;	fill: none; <br>
+            &nbsp;	stroke: #000; <br>
+            &nbsp;	shape-rendering: crispEdges; <br>
+            &nbsp;}  <br>
+            &lt;/style&gt;<br>
+            <br>
+            &lt;script&gt;<br>
+            <br>
+            &nbsp;var xAxisText = "Population"; <br>
+            &nbsp;var yAxisText = "Top 3 countries"<br>
+            <br>
+            &nbsp;var xAxisG = g.append('g') <br>
+            &nbsp;  .attr('class', 'x axis') <br>
+            &nbsp;  .attr('transform', 'translate(0,' + innerHeight + ')'); <br>
+            &nbsp;var xAxisLabel = xAxisG.append('text') <br>
+            &nbsp;  .style("text-anchor", "middle") <br>
+            &nbsp;  .attr("x", innerWidth / 2) <br>
+            &nbsp;  .attr("y", xAxisLabelOffset) <br>
+            &nbsp;  .attr("class", "label") <br>
+            &nbsp;  .text(xAxisLabelText); <br>
+            &nbsp;var yAxisG = g.append('g') <br>
+            &nbsp;  .attr('class', 'y axis'); <br>
+            &nbsp;var yAxisLabel = yAxisG.append('text') <br>
+            &nbsp;  .style("text-anchor", "middle") <br>
+            &nbsp;  .attr("transform", "translate(-" + yAxisLabelOffset98 + "," + (innerHeight98 / 2) + ") rotate(-90)") <br>
+            &nbsp;  .attr("class", "label") <br>
+            &nbsp;  .text(yAxisLabelText98); <br>
+            <br>
+            &lt;/script&gt;
+          </code>
         </div>
       </div>
 		</div>
