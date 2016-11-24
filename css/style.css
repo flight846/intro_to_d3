@@ -55,6 +55,33 @@ code {
   position: absolute;
 }
 
+.affix-top {
+  position: relative;
+}
+
+.affix {
+  top: 20px;
+}
+
+.affix,
+.affix-bottom {
+    width: 213px;
+}
+
+.affix-bottom {
+  position: absolute;
+}
+
+footer {
+	background: #c1e1ec;
+  height: 60px;
+}
+
+footer p {
+  line-height: 60px;
+  margin-bottom: 0;
+}
+
 #example-75 > svg > circle {
 	fill: blue;
 }
@@ -82,6 +109,17 @@ code {
 	fill: none;
 	stroke: black;
 	stroke-width: 2px;
+}
+
+#example-96 .axis text {
+	font-size: 12px;
+	font-family: "helvetica-neue", helvetica, sans-serif;
+}
+
+#example-96 .axis path, .axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
 }
 
 @media (min-width:1200px) {

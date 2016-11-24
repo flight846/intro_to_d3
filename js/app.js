@@ -1,6 +1,7 @@
 $('#nav').affix({
   offset: {
-    top: $('#nav').offset().top
+    top: $('#nav').offset().top,
+    bottom: ($('footer').outerHeight(true) + 40)
   }
 })
 
@@ -1339,8 +1340,8 @@ var xAxis95 = d3.svg.axis().scale(xScale95).orient('bottom')
 var yAxis95 = d3.svg.axis().scale(yScale95).orient('left')
 
 function render95 (data) {
-  xScale95.domain(data.map(function (d) { return d[xColumn95] }))
-  yScale95.domain([0, d3.max(data, function (d) { return d[yColumn95] })])
+  xScale95.domain(data.map(function (d) { return d[xColumn95]}))
+  yScale95.domain([0, d3.max(data, function (d) { return d[yColumn95]})])
 
   xAxisG95.call(xAxis95)
   yAxisG95.call(yAxis95)
@@ -1363,3 +1364,61 @@ function type95 (d) {
 }
 
 d3.csv('geonames_cities_top3.csv', type95, render95)
+
+// example-96
+var outerWidth96 = 500
+var outerHeight96 = 250
+
+var margin96 = { left: 90, top: 30, right: 30, bottom: 30 }
+var barPadding96 = 0.2
+
+var xColumn96 = 'name'
+var yColumn96 = 'population'
+
+var innerWidth96 = outerWidth96 - margin96.left - margin96.right
+var innerHeight96 = outerHeight96 - margin96.top - margin96.bottom
+
+var svg96 = d3.select('#example-96').append('svg')
+  .attr('width', outerWidth96)
+  .attr('height', outerHeight96)
+
+var g96 = svg96.append('g')
+  .attr('transform', 'translate(' + margin96.left + ',' + margin96.top + ')')
+
+var xAxisG96 = g96.append('g')
+  .attr('class', 'x axis')
+  .attr('transform', 'translate(0,' + innerHeight96 + ')')
+var yAxisG96 = g96.append('g')
+  .attr('class', 'y axis')
+
+var xScale96 = d3.scale.ordinal().rangeBands([0, innerWidth96], barPadding96)
+var yScale96 = d3.scale.linear().range([innerHeight96, 0])
+
+var xAxis96 = d3.svg.axis().scale(xScale96).orient('bottom')
+var yAxis96 = d3.svg.axis().scale(yScale96).orient('left')
+
+function render96 (data) {
+  xScale96.domain(data.map(function (d) { return d[xColumn96]}))
+  yScale96.domain([0, d3.max(data, function (d) { return d[yColumn96]})])
+
+  xAxisG96.call(xAxis96)
+  yAxisG96.call(yAxis96)
+
+  var bars96 = g96.selectAll('rect').data(data)
+  bars96.enter().append('rect')
+    .attr('width', xScale96.rangeBand())
+
+  bars96
+    .attr('x', function (d) { return xScale96(d[xColumn96]) })
+    .attr('y', function (d) { return yScale96(d[yColumn96]) })
+    .attr('height', function (d) { return innerHeight96 - yScale96(d[yColumn96]) })
+
+  bars96.exit().remove()
+}
+
+function type96 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('geonames_cities_top3.csv', type96, render96)
