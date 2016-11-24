@@ -18,6 +18,13 @@ var margin100 = { left: 90, top: 30, right: 30, bottom: 30 }
 var xColumn100 = 'country'
 var yColumn100 = 'population'
 
+// Label vars
+ var xAxisLabelText100 = "Top 5 countries";
+ var xAxisLabelOffset100 = 50;
+
+ var yAxisLabelText100 = "Population";
+ var yAxisLabelOffset100 = 60;
+
 // set inner margin
 var innerWidth100 = outerWidth100 - margin100.left - margin100.right
 var innerHeight100 = outerHeight100 - margin100.top - margin100.bottom
@@ -25,7 +32,7 @@ var innerHeight100 = outerHeight100 - margin100.top - margin100.bottom
 // create svg
 var svg100 = d3.select('#example-100').append('svg')
   .attr('width', outerWidth100)
-  .attr('height', outerHeight100)
+  .attr('height', outerHeight100 + xAxisLabelOffset100)
 
 var g100 = svg100.append('g')
   .attr('transform', 'translate(' + margin100.left + ',' + margin100.top + ')')
@@ -34,8 +41,18 @@ var g100 = svg100.append('g')
 var xAxisG100 = g100.append('g')
   .attr('class', 'x axis')
   .attr('transform', 'translate(0,' + innerHeight100 + ')')
+var xAxisLabel100 = xAxisG100.append("text")
+  .style("text-anchor", "middle")
+  .attr("transform", "translate(" + (innerWidth100 / 2) + "," + xAxisLabelOffset100 + ")")
+  .attr("class", "label")
+  .text(xAxisLabelText100);
 var yAxisG100 = g100.append('g')
   .attr('class', 'y axis')
+var yAxisLabel100 = yAxisG100.append("text")
+  .style("text-anchor", "middle")
+  .attr("transform", "translate(-" + yAxisLabelOffset100 + "," + (innerHeight100 / 2) + ") rotate(-90)")
+  .attr("class", "label")
+  .text(yAxisLabelText100);
 
 // set x, y scale range
 var xScale100 = d3.scale.ordinal().rangeBands([0, innerWidth100], barPadding100)

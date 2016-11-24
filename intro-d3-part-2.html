@@ -21,7 +21,7 @@
 			<div id="bar-chart">
 				<h4>Bar chart</h4>
 				<div class="row panel">
-          <div id="example-100"></div>
+          <div id="example-"></div>
 					<p>index.html</p>
 					<code>
             &lt;style&gt; <br>
@@ -45,6 +45,13 @@
             &nbsp;var xColumn = "country"; <br>
             &nbsp;var yColumn = "population"; <br>
             <br>
+            &nbsp;// Label vars <br>
+            &nbsp;var xAxisLabelText = "Top 5 countries"; <br>
+            &nbsp;var xAxisLabelOffset = 50; <br>
+            <br>
+            &nbsp;var yAxisLabelText = "Population"; <br>
+            &nbsp;var yAxisLabelOffset = 60; <br>
+            <br>
             &nbsp;// set inner margin <br>
             &nbsp;var innerWidth  = outerWidth  - margin.left - margin.right; <br>
             &nbsp;var innerHeight = outerHeight - margin.top  - margin.bottom; <br>
@@ -52,14 +59,26 @@
             &nbsp;// create svg <br>
             &nbsp;var svg = d3.select("body").append("svg") <br>
             &nbsp;  .attr("width",  outerWidth) <br>
-            &nbsp;  .attr("height", outerHeight); <br>
+            &nbsp;  .attr("height", outerHeight + xAxisLabelOffset); <br>
             &nbsp;var g = svg.append("g") <br>
             &nbsp;  .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); <br>
-            &nbsp;var xAxisG = g.append("g") <br>
-            &nbsp;  .attr("class", "x axis") <br>  
-            &nbsp;  .attr("transform", "translate(0," + innerHeight + ")"); <br>
-            &nbsp;var yAxisG = g.append("g") <br>
-            &nbsp;  .attr("class", "y axis"); <br>
+            <br>
+            &nbsp;// setup axis <br>
+            &nbsp;var xAxisG = g.append('g') <br>
+            &nbsp;  .attr('class', 'x axis') <br>
+            &nbsp;  .attr('transform', 'translate(0,' + innerHeight + ')') <br>
+            &nbsp;var xAxisLabel = xAxisG.append("text") <br>
+            &nbsp;  .style("text-anchor", "middle")   br
+            &nbsp;  .attr("transform", "translate(" + (innerWidth / 2) + "," + xAxisLabelOffset + ")") <br>
+            &nbsp;  .attr("class", "label") <br>
+            &nbsp;  .text(xAxisLabelText); <br>
+            &nbsp;var yAxisG = g.append('g') <br>
+            &nbsp;  .attr('class', 'y axis') <br>
+            &nbsp;var yAxisLabel = yAxisG.append("text") <br>
+            &nbsp;  .style("text-anchor", "middle") <br>
+            &nbsp;  .attr("transform", "translate(-" + yAxisLabelOffset + "," + (innerHeight / 2) + ") rotate(-90)") <br>
+            &nbsp;  .attr("class", "label") <br>
+            &nbsp;  .text(yAxisLabelText); <br>
             <br>
             &nbsp;// set x, y scale range <br>
             &nbsp;var xScale = d3.scale.ordinal().rangeBands([0, innerWidth], barPadding); <br>

@@ -1526,10 +1526,10 @@ var xAxisLabel98 = xAxisG98.append('text')
 var yAxisG98 = g98.append('g')
   .attr('class', 'y axis')
 var yAxisLabel98 = yAxisG98.append('text')
-  .style("text-anchor", "middle")
-  .attr("transform", "translate(-" + yAxisLabelOffset98 + "," + (innerHeight98 / 2) + ") rotate(-90)")
-  .attr("class", "label")
-  .text(yAxisLabelText98);
+  .style('text-anchor', 'middle')
+  .attr('transform', 'translate(-' + yAxisLabelOffset98 + ',' + (innerHeight98 / 2) + ') rotate(-90)')
+  .attr('class', 'label')
+  .text(yAxisLabelText98)
 
 var xScale98 = d3.scale.linear().range([0, innerWidth98])
 var yScale98 = d3.scale.ordinal().rangeBands([0, innerHeight98], barPadding98)
@@ -1577,10 +1577,10 @@ var margin99 = { left: 70, top: 5, right: 5, bottom: 60 }
 var xColumn99 = 'timestamp'
 var yColumn99 = 'temperature'
 
-var xAxisLabelText99 = "Time"
+var xAxisLabelText99 = 'Time'
 var xAxisLabelOffset99 = 48
 
-var yAxisLabelText99 = "Temperature °C"
+var yAxisLabelText99 = 'Temperature °C'
 var yAxisLabelOffset99 = 40
 
 var innerWidth99 = outerWidth99 - margin99.left - margin99.right
@@ -1594,35 +1594,35 @@ var g99 = svg99.append('g')
   .attr('transform', 'translate(' + margin99.left + ',' + margin99.top + ')')
 
 var path99 = g99.append('path')
-  .attr("class", "chart-line")
+  .attr('class', 'chart-line')
 
-var xAxisG99 = g99.append("g")
-  .attr("class", "x axis")
-  .attr("transform", "translate(0," + innerHeight99 + ")")
-var xAxisLabel99 = xAxisG99.append("text")
-  .style("text-anchor", "middle")
-  .attr("transform", "translate(" + (innerWidth99 / 2) + "," + xAxisLabelOffset99 + ")")
-  .attr("class", "label")
-  .text(xAxisLabelText99);
+var xAxisG99 = g99.append('g')
+  .attr('class', 'x axis')
+  .attr('transform', 'translate(0,' + innerHeight99 + ')')
+var xAxisLabel99 = xAxisG99.append('text')
+  .style('text-anchor', 'middle')
+  .attr('transform', 'translate(' + (innerWidth99 / 2) + ',' + xAxisLabelOffset99 + ')')
+  .attr('class', 'label')
+  .text(xAxisLabelText99)
 
-var yAxisG99 = g99.append("g")
-  .attr("class", "y axis");
-var yAxisLabel99 = yAxisG99.append("text")
-  .style("text-anchor", "middle")
-  .attr("transform", "translate(-" + yAxisLabelOffset99 + "," + (innerHeight99 / 2) + ") rotate(-90)")
-  .attr("class", "label")
-  .text(yAxisLabelText99);
+var yAxisG99 = g99.append('g')
+  .attr('class', 'y axis')
+var yAxisLabel99 = yAxisG99.append('text')
+  .style('text-anchor', 'middle')
+  .attr('transform', 'translate(-' + yAxisLabelOffset99 + ',' + (innerHeight99 / 2) + ') rotate(-90)')
+  .attr('class', 'label')
+  .text(yAxisLabelText99)
 
 var xScale99 = d3.time.scale().range([0, innerWidth99])
 var yScale99 = d3.scale.linear().range([innerHeight99, 0])
 
-var xAxis99 = d3.svg.axis().scale(xScale99).orient("bottom")
+var xAxis99 = d3.svg.axis().scale(xScale99).orient('bottom')
   .ticks(5)
-  .outerTickSize(0);
-var yAxis99 = d3.svg.axis().scale(yScale99).orient("left")
+  .outerTickSize(0)
+var yAxis99 = d3.svg.axis().scale(yScale99).orient('left')
   .ticks(5)
-  .tickFormat(d3.format("s"))
-  .outerTickSize(0);
+  .tickFormat(d3.format('s'))
+  .outerTickSize(0)
 
 var line99 = d3.svg.line()
   .x(function (d) { return xScale99(d[xColumn99]); })
@@ -1632,8 +1632,8 @@ function render99 (data) {
   xScale99.domain(d3.extent(data, function (d) { return d[xColumn99]}))
   yScale99.domain(d3.extent(data, function (d) { return d[yColumn99]}))
 
-  xAxisG99.call(xAxis99);
-  yAxisG99.call(yAxis99);
+  xAxisG99.call(xAxis99)
+  yAxisG99.call(yAxis99)
 
   path99.attr('d', line99(data)) // assign the line path with M, L values from data
 }
