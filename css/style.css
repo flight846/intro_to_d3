@@ -111,12 +111,12 @@ footer p {
 	stroke-width: 2px;
 }
 
-#example-96 .axis text {
+.axis text {
 	font-size: 12px;
 	font-family: "helvetica-neue", helvetica, sans-serif;
 }
 
-#example-96 .axis path, .axis line {
+.axis path, .axis line {
 	fill: none;
 	stroke: #000;
 	shape-rendering: crispEdges;

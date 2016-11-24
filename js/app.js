@@ -1395,7 +1395,11 @@ var xScale96 = d3.scale.ordinal().rangeBands([0, innerWidth96], barPadding96)
 var yScale96 = d3.scale.linear().range([innerHeight96, 0])
 
 var xAxis96 = d3.svg.axis().scale(xScale96).orient('bottom')
+  .outerTickSize(0) // Turn off the marks at the end of the axis.
 var yAxis96 = d3.svg.axis().scale(yScale96).orient('left')
+  .ticks(5) // Use approximately 5 ticks marks.
+  .tickFormat(d3.format('s')) // Use intelligent abbreviations, e.g. 5M for 5 Million
+  .outerTickSize(0) // Turn off the marks at the end of the axis.
 
 function render96 (data) {
   xScale96.domain(data.map(function (d) { return d[xColumn96]}))
@@ -1422,3 +1426,66 @@ function type96 (d) {
 }
 
 d3.csv('geonames_cities_top3.csv', type96, render96)
+
+// example-97
+var outerWidth97 = 500
+var outerHeight97 = 250
+var barPadding97 = 0.2
+
+var margin97 = { left: 130, top: 0, right: 0, bottom: 30 }
+
+var xColumn97 = 'population'
+var yColumn97 = 'name'
+
+var innerWidth97 = outerWidth97 - margin97.left - margin97.right
+var innerHeight97 = outerHeight97 - margin97.top - margin97.bottom
+
+var svg97 = d3.select('#example-97').append('svg')
+  .attr('width', outerWidth97)
+  .attr('height', outerHeight97)
+
+var g97 = svg97.append('g')
+  .attr('transform', 'translate(' + margin97.left + ',' + margin97.top + ')')
+
+var xAxisG97 = g97.append('g')
+  .attr('class', 'x axis')
+  .attr('transform', 'translate(0,' + innerHeight97 + ')')
+var yAxisG97 = g97.append('g')
+  .attr('class', 'y axis')
+
+var xScale97 = d3.scale.linear().range([0, innerWidth97])
+var yScale97 = d3.scale.ordinal().rangeBands([0, innerHeight97], barPadding97)
+
+var xAxis97 = d3.svg.axis().scale(xScale97).orient('bottom')
+  .ticks(5) // Use approximately 5 ticks marks.
+  .tickFormat(d3.format('s')) // Use intelligent abbreviations, e.g. 5M for 5 Million
+  .outerTickSize(0); // Turn off the marks at the end of the axis.
+var yAxis97 = d3.svg.axis().scale(yScale97).orient('left')
+  .outerTickSize(0); // Turn off the marks at the end of the axis.
+
+function render97 (data) {
+  xScale97.domain([0, d3.max(data, function (d) { return d[xColumn97]; })])
+  yScale97.domain(data.map(function (d) { return d[yColumn97]; }))
+
+  xAxisG97.call(xAxis97)
+  yAxisG97.call(yAxis97)
+
+  var bars97 = g97.selectAll('rect').data(data)
+
+  bars97.enter().append('rect')
+    .attr('height', yScale97.rangeBand())
+
+  bars97
+    .attr('x', 0)
+    .attr('y', function (d) { return yScale97(d[yColumn97]); })
+    .attr('width', function (d) { return xScale97(d[xColumn97]); })
+
+  bars97.exit().remove()
+}
+
+function type97 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('geonames_cities_top3.csv', type97, render97)
