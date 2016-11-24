@@ -138,6 +138,16 @@ footer p {
 	stroke-width: 2px;
 }
 
+#example-100 path {
+	fill: none;
+	stroke: black;
+	stroke-width: 2px;
+}
+
+
+
+
+
 @media (min-width:1200px) {
   .affix,
   .affix-bottom {

@@ -21,15 +21,97 @@
 			<div id="bar-chart">
 				<h4>Bar chart</h4>
 				<div class="row panel">
-          <div class="example-100"></div>
+          <div id="example-100"></div>
 					<p>index.html</p>
 					<code>
-
+            &lt;style&gt; <br>
+            &nbsp;path { <br>
+            &nbsp;	fill: none; <br>
+            &nbsp;	stroke: black; <br>
+            &nbsp;	stroke-width: 2px; <br>
+            &nbsp;} <br>
+            <br>
+            &lt;/style&gt; <br>
+            <br>
+            &lt;script&gt; <br>
+            <br>
+            &nbsp;// config vars <br>
+            &nbsp;var outerWidth = 500; <br>
+            &nbsp;var outerHeight = 250; <br>
+            &nbsp;var margin = { left: 90, top: 30, right: 30, bottom: 30 }; <br>
+            &nbsp;var barPadding = 0.2; <br>
+            <br>
+            &nbsp;// set x, y data <br>
+            &nbsp;var xColumn = "country"; <br>
+            &nbsp;var yColumn = "population"; <br>
+            <br>
+            &nbsp;// set inner margin <br>
+            &nbsp;var innerWidth  = outerWidth  - margin.left - margin.right; <br>
+            &nbsp;var innerHeight = outerHeight - margin.top  - margin.bottom; <br>
+            <br>
+            &nbsp;// create svg <br>
+            &nbsp;var svg = d3.select("body").append("svg") <br>
+            &nbsp;  .attr("width",  outerWidth) <br>
+            &nbsp;  .attr("height", outerHeight); <br>
+            &nbsp;var g = svg.append("g") <br>
+            &nbsp;  .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); <br>
+            &nbsp;var xAxisG = g.append("g") <br>
+            &nbsp;  .attr("class", "x axis") <br>  
+            &nbsp;  .attr("transform", "translate(0," + innerHeight + ")"); <br>
+            &nbsp;var yAxisG = g.append("g") <br>
+            &nbsp;  .attr("class", "y axis"); <br>
+            <br>
+            &nbsp;// set x, y scale range <br>
+            &nbsp;var xScale = d3.scale.ordinal().rangeBands([0, innerWidth], barPadding); <br>
+            &nbsp;var yScale = d3.scale.linear().range([innerHeight, 0]); <br>
+            <br>
+            &nbsp;// Use a modified SI formatter that uses "B" for Billion. <br>
+            &nbsp;var siFormat = d3.format("s"); <br>
+            &nbsp;var customTickFormat = function (d){ <br>
+            &nbsp;  return siFormat(d).replace("G", "B"); <br>
+            &nbsp;}; <br>
+            <br>
+            &nbsp;// Instantiate axes <br>
+            &nbsp;var xAxis = d3.svg.axis().scale(xScale).orient("bottom") <br>
+            &nbsp;  .outerTickSize(0); <br>
+            &nbsp;var yAxis = d3.svg.axis().scale(yScale).orient("left") <br>
+            &nbsp;  .ticks(5) <br>
+            &nbsp;  .tickFormat(customTickFormat) <br>
+            &nbsp;  .outerTickSize(0); <br>
+            <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;  xScale.domain(data.map( function (d){ return d[xColumn]; })); <br>
+            &nbsp;  yScale.domain([0, d3.max(data, function (d){ return d[yColumn]; })]); <br>
+            <br>
+            &nbsp;  // render axes <br>
+            &nbsp;  xAxisG.call(xAxis); <br>
+            &nbsp;  yAxisG.call(yAxis);   <br>
+            <br>
+            &nbsp;  var bars = g.selectAll("rect").data(data); <br>
+            <br>
+            &nbsp;  // enter phase <br>
+            &nbsp;  bars.enter().append("rect") <br>
+            &nbsp;    .attr("width", xScale.rangeBand()); <br>
+            <br>
+            &nbsp;  // update phase <br>
+            &nbsp;  bars <br>
+            &nbsp;    .attr("x", function (d){ return xScale(d[xColumn]); }) <br>
+            &nbsp;    .attr("y", function (d){ return yScale(d[yColumn]); }) <br>
+            &nbsp;    .attr("height", function (d){ return innerHeight - yScale(d[yColumn]); }); <br>
+            <br>
+            &nbsp;  // exit phase
+            &nbsp;  bars.exit().remove(); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("populationByCountry2015.csv", type, render); <br>
+            <br>
+            &lt;/script&gt;
 					</code>
-					<br />
-					<ul>
-						<li>Place data.csv file in same directory as data.csv or run a local server and give CSV URL</li>
-					</ul>
 				</div>
       </div>
       <div class="row">
