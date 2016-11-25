@@ -14,6 +14,8 @@
 		<div class="col-md-2 side-menu scrollspy">
 			<ul id="nav" class="nav hidden-xs hidden-sm" data-spy="affix">
 				<li><a href="#bar-chart">Bar chart</a></li>
+        <li><a href="#tilt-axis-text">Tilting axis text</a></li>
+        <li><a href="#adding-colors-bar">Adding colors</a></li>
 			</ul>
 		</div>
 		<div class="col-md-10 col-xs-12 main-container">
@@ -103,7 +105,7 @@
             &nbsp;  yScale.domain([0, d3.max(data, function (d){ return d[yColumn]; })]); <br>
             <br>
             &nbsp;  // render axes <br>
-            &nbsp;  xAxisG.call(xAxis); <br>
+            &nbsp;  xAxisG.call(xAxis) <br>
             &nbsp;  yAxisG.call(yAxis);   <br>
             <br>
             &nbsp;  var bars = g.selectAll("rect").data(data); <br>
@@ -134,7 +136,7 @@
 				</div>
       </div>
       <br>
-      <div id="bar-chart">
+      <div id="tilt-axis-text">
 				<h4>Tilting axis text</h4>
 				<div class="row panel">
           <div id="example-101"></div>
@@ -158,11 +160,11 @@
             &nbsp;var barPadding = 0.2; <br>
             <br>
             &nbsp;// set x, y data <br>
-            &nbsp;var xColumn = "country"; <br>
+            &nbsp;var xColumn = "religion"; <br>
             &nbsp;var yColumn = "population"; <br>
             <br>
             &nbsp;// Label vars <br>
-            &nbsp;var xAxisLabelText = "Top 5 countries"; <br>
+            &nbsp;var xAxisLabelText = "Religions"; <br>
             &nbsp;var xAxisLabelOffset = 50; <br>
             <br>
             &nbsp;var yAxisLabelText = "Population"; <br>
@@ -219,7 +221,13 @@
             &nbsp;  yScale.domain([0, d3.max(data, function (d){ return d[yColumn]; })]); <br>
             <br>
             &nbsp;  // render axes <br>
-            &nbsp;  xAxisG.call(xAxis); <br>
+            &nbsp;  xAxisG <br>
+            &nbsp;    .call(xAxis); <br>
+            &nbsp;    .selectAll("text") <br>
+            &nbsp;    .attr("dx", "-0.8em") <br>
+            &nbsp;    .attr("dy", "1em") <br>
+            &nbsp;    .attr("transform", "rotate(-20)"); <br>
+            <br>
             &nbsp;  yAxisG.call(yAxis);   <br>
             <br>
             &nbsp;  var bars = g.selectAll("rect").data(data); <br>
@@ -243,7 +251,133 @@
             &nbsp;  return d; <br>
             &nbsp;} <br>
             <br>
-            &nbsp;d3.csv("populationByCountry2015.csv", type, render); <br>
+            &nbsp;d3.csv("religionWorldTotals.csv", type, render); <br>
+            <br>
+            &lt;/script&gt;
+					</code>
+				</div>
+      </div>
+      <br>
+      <div id="adding-colors-bar">
+				<h4>Adding colors</h4>
+				<div class="row panel">
+          <div id="example-102"></div>
+					<p>index.html</p>
+					<code>
+            &lt;style&gt; <br>
+            &nbsp;path { <br>
+            &nbsp;	fill: none; <br>
+            &nbsp;	stroke: black; <br>
+            &nbsp;	stroke-width: 2px; <br>
+            &nbsp;} <br>
+            <br>
+            &lt;/style&gt; <br>
+            <br>
+            &lt;script&gt; <br>
+            <br>
+            &nbsp;// config vars <br>
+            &nbsp;var outerWidth = 500; <br>
+            &nbsp;var outerHeight = 250; <br>
+            &nbsp;var margin = { left: 90, top: 30, right: 30, bottom: 30 }; <br>
+            &nbsp;var barPadding = 0.2; <br>
+            <br>
+            &nbsp;// set x, y data <br>
+            &nbsp;var xColumn = "religion"; <br>
+            &nbsp;var yColumn = "population"; <br>
+            &nbsp;var colorColumn = "religion"; <br>
+            <br>
+            &nbsp;// Label vars <br>
+            &nbsp;var xAxisLabelText = "Religions"; <br>
+            &nbsp;var xAxisLabelOffset = 50; <br>
+            <br>
+            &nbsp;var yAxisLabelText = "Population"; <br>
+            &nbsp;var yAxisLabelOffset = 60; <br>
+            <br>
+            &nbsp;// set inner margin <br>
+            &nbsp;var innerWidth  = outerWidth  - margin.left - margin.right; <br>
+            &nbsp;var innerHeight = outerHeight - margin.top  - margin.bottom; <br>
+            <br>
+            &nbsp;// create svg <br>
+            &nbsp;var svg = d3.select("body").append("svg") <br>
+            &nbsp;  .attr("width",  outerWidth) <br>
+            &nbsp;  .attr("height", outerHeight + xAxisLabelOffset); <br>
+            &nbsp;var g = svg.append("g") <br>
+            &nbsp;  .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); <br>
+            <br>
+            &nbsp;// setup axis <br>
+            &nbsp;var xAxisG = g.append('g') <br>
+            &nbsp;  .attr('class', 'x axis') <br>
+            &nbsp;  .attr('transform', 'translate(0,' + innerHeight + ')') <br>
+            &nbsp;var xAxisLabel = xAxisG.append("text") <br>
+            &nbsp;  .style("text-anchor", "middle")   br
+            &nbsp;  .attr("transform", "translate(" + (innerWidth / 2) + "," + xAxisLabelOffset + ")") <br>
+            &nbsp;  .attr("class", "label") <br>
+            &nbsp;  .text(xAxisLabelText); <br>
+            &nbsp;var yAxisG = g.append('g') <br>
+            &nbsp;  .attr('class', 'y axis') <br>
+            &nbsp;var yAxisLabel = yAxisG.append("text") <br>
+            &nbsp;  .style("text-anchor", "middle") <br>
+            &nbsp;  .attr("transform", "translate(-" + yAxisLabelOffset + "," + (innerHeight / 2) + ") rotate(-90)") <br>
+            &nbsp;  .attr("class", "label") <br>
+            &nbsp;  .text(yAxisLabelText); <br>
+            <br>
+            &nbsp;// set x, y scale range <br>
+            &nbsp;var xScale = d3.scale.ordinal().rangeBands([0, innerWidth], barPadding); <br>
+            &nbsp;var yScale = d3.scale.linear().range([innerHeight, 0]); <br>
+            &nbsp;var colorScale = d3.scale.category10(); <br>
+            <br>
+            &nbsp;// Use a modified SI formatter that uses "B" for Billion. <br>
+            &nbsp;var siFormat = d3.format("s"); <br>
+            &nbsp;var customTickFormat = function (d){ <br>
+            &nbsp;  return siFormat(d).replace("G", "B"); <br>
+            &nbsp;}; <br>
+            <br>
+            &nbsp;// Instantiate axes <br>
+            &nbsp;var xAxis = d3.svg.axis().scale(xScale).orient("bottom") <br>
+            &nbsp;  .outerTickSize(0); <br>
+            &nbsp;var yAxis = d3.svg.axis().scale(yScale).orient("left") <br>
+            &nbsp;  .ticks(5) <br>
+            &nbsp;  .tickFormat(customTickFormat) <br>
+            &nbsp;  .outerTickSize(0); <br>
+            <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;  xScale.domain(data.map( function (d){ return d[xColumn]; })); <br>
+            &nbsp;  yScale.domain([0, d3.max(data, function (d){ return d[yColumn]; })]); <br>
+            &nbsp;  colorScale.domain(data.map( function (d) {return d[colorColumn]; })); <br>
+            <br>
+            &nbsp;  // render axes <br>
+            &nbsp;  xAxisG <br>
+            &nbsp;    .call(xAxis); <br>
+            &nbsp;    .selectAll("text") <br>
+            &nbsp;    .attr("dx", "-0.8em") <br>
+            &nbsp;    .attr("dy", "1em") <br>
+            &nbsp;    .attr("transform", "rotate(-20)"); <br>
+            <br>
+            &nbsp;  yAxisG.call(yAxis);   <br>
+            <br>
+            &nbsp;  var bars = g.selectAll("rect").data(data); <br>
+            <br>
+            &nbsp;  // enter phase <br>
+            &nbsp;  bars.enter().append("rect") <br>
+            &nbsp;    .attr("width", xScale.rangeBand()); <br>
+            <br>
+            &nbsp;  // update phase <br>
+            &nbsp;  bars <br>
+            &nbsp;    .attr("x", function (d){ return xScale(d[xColumn]); }) <br>
+            &nbsp;    .attr("y", function (d){ return yScale(d[yColumn]); }) <br>
+            &nbsp;    .attr("height", function (d){ return innerHeight - yScale(d[yColumn]); }) <br>
+            &nbsp;    .attr("fill", function (d) { return colorScale(d[colorColumn]); }); <br>
+            <br>
+            &nbsp;  // exit phase <br>
+            &nbsp;  bars.exit().remove(); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("religionWorldTotals.csv", type, render); <br>
             <br>
             &lt;/script&gt;
 					</code>
