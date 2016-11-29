@@ -241,3 +241,28 @@ function type102 (d) {
   return d
 }
 d3.csv('religionWorldTotals.csv', type102, render102)
+
+// example-103
+var yColumn103 = 'population'
+
+function render103 (data) {
+  var stack103 = d3.layout.stack()
+    .y(function (d) {
+      return d[yColumn103]
+    })
+    .values(function (d) {
+      return [d]
+    })
+
+  var stacked103 = stack103(data)
+
+  d3.select('#example-103').append('pre')
+    .text(JSON.stringify(stacked103, null, 2))
+}
+
+function type103 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('religionWorldTotals.csv', type103, render103)

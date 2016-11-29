@@ -16,6 +16,7 @@
 				<li><a href="#bar-chart">Bar chart</a></li>
         <li><a href="#tilt-axis-text">Tilting axis text</a></li>
         <li><a href="#adding-colors-bar">Adding colors</a></li>
+        <li><a href="#stack-layout">Stacked layout</a></li>
 			</ul>
 		</div>
 		<div class="col-md-10 col-xs-12 main-container">
@@ -70,7 +71,7 @@
             &nbsp;  .attr('class', 'x axis') <br>
             &nbsp;  .attr('transform', 'translate(0,' + innerHeight + ')') <br>
             &nbsp;var xAxisLabel = xAxisG.append("text") <br>
-            &nbsp;  .style("text-anchor", "middle")   br
+            &nbsp;  .style("text-anchor", "middle") <br>
             &nbsp;  .attr("transform", "translate(" + (innerWidth / 2) + "," + xAxisLabelOffset + ")") <br>
             &nbsp;  .attr("class", "label") <br>
             &nbsp;  .text(xAxisLabelText); <br>
@@ -378,6 +379,50 @@
             &nbsp;} <br>
             <br>
             &nbsp;d3.csv("religionWorldTotals.csv", type, render); <br>
+            <br>
+            &lt;/script&gt;
+					</code>
+				</div>
+      </div>
+      <br>
+      <div id="stack-layout">
+				<h4>Stacked layout</h4>
+				<div class="row panel">
+          <div id="example-103"></div>
+          <ul>
+            <li>Computes 2d graph data to stack</li>
+            <li>x - the x-position of the value</li>
+            <li>y - the y-thickness of the value</li>
+            <li>y0 - the minimum y-position of the value (baseline)</li>
+          </ul>
+          <br>
+					<p>index.html</p>
+					<code>
+            &lt;script&gt; <br>
+            <br>
+            &nbsp;var yColumn = "population"; <br>
+            <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;&nbsp;var stack = d3.layout.stack() <br>
+            &nbsp;&nbsp;&nbsp;.y(function (d) { <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;return d[yColumn]; <br>
+            &nbsp;&nbsp;&nbsp;}) <br>
+            &nbsp;&nbsp;&nbsp;.values(function (d){ <br>
+            &nbsp;&nbsp;&nbsp;return [d]; <br>
+            &nbsp;&nbsp;&nbsp;}); <br>
+            <br>
+            &nbsp;&nbsp;var stacked = stack(data); <br>
+            <br>
+            &nbsp;&nbsp;d3.select("body").append("pre") <br>
+            &nbsp;&nbsp;&nbsp;.text(JSON.stringify(stacked, null, 2)); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("religionWorldTotals.csv", type, render);<br>
             <br>
             &lt;/script&gt;
 					</code>
