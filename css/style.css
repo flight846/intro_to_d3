@@ -144,6 +144,11 @@ footer p {
 	stroke-width: 2px;
 }
 
+.color-legend text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 10pt;
+}
+
 
 
 

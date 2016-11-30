@@ -499,3 +499,113 @@ function type108 (d) {
 }
 
 d3.csv('religionByCountryTop5.csv', type108, render108)
+
+// example-109
+var outerWidth109 = 500
+var outerHeight109 = 250
+var margin109 = { left: 90, top: 30, right: 30, bottom: 40 }
+var barPadding109 = 0.2
+
+var xColumn109 = 'country'
+var yColumn109 = 'population'
+var colorColumn109 = 'religion'
+var layerColumn109 = colorColumn109
+
+var innerWidth109 = outerWidth109 - margin109.left - margin109.right
+var innerHeight109 = outerHeight109 - margin109.top - margin109.bottom
+
+var svg109 = d3.select('#example-109').append('svg')
+  .attr('width', outerWidth109)
+  .attr('height', outerHeight109)
+var g109 = svg109.append('g')
+  .attr('transform', 'translate(' + margin109.left + ',' + margin109.top + ')')
+var xAxisG109 = g109.append('g')
+  .attr('class', 'x axis')
+  .attr('transform', 'translate(0,' + innerHeight109 + ')')
+var yAxisG109 = g109.append('g')
+  .attr('class', 'y axis')
+var colorLegendG109 = g109.append('g')
+  .attr('class', 'color-legend')
+  .attr('transform', 'translate(235, 0)')
+
+var xScale109 = d3.scale.ordinal().rangeBands([0, innerWidth109], barPadding109)
+var yScale109 = d3.scale.linear().range([innerHeight109, 0])
+var colorScale109 = d3.scale.category10()
+
+// Use a modified SI formatter that uses "B" for Billion.
+var siFormat109 = d3.format('s')
+var customTickFormat109 = function (d) {
+  return siFormat109(d).replace('G', 'B')
+}
+var xAxis109 = d3.svg.axis().scale(xScale109).orient('bottom')
+  .outerTickSize(0)
+var yAxis109 = d3.svg.axis().scale(yScale109).orient('left')
+  .ticks(5)
+  .tickFormat(customTickFormat109)
+  .outerTickSize(0)
+var colorLegend109 = d3.legend.color()
+  .scale(colorScale109)
+  .shapePadding(3)
+  .shapeWidth(15)
+  .shapeHeight(15)
+  .labelOffset(4)
+
+function render109 (data) {
+  var nested109 = d3.nest()
+    .key(function (d) { return d[layerColumn109]; })
+    .entries(data)
+  var stack109 = d3.layout.stack()
+    .y(function (d) { return d[yColumn109]; })
+    .values(function (d) { return d.values; })
+  var layers109 = stack109(nested109)
+
+  xScale109.domain(layers109[0].values.map(function (d) {
+    return d[xColumn109]
+  }))
+  yScale109.domain([
+    0,
+    d3.max(layers109, function (layer) {
+      return d3.max(layer.values, function (d) {
+        return d.y0 + d.y
+      })
+    })
+  ])
+  colorScale109.domain(layers109.map(function (layer) {
+    return layer.key
+  }))
+
+  xAxisG109.call(xAxis109)
+  yAxisG109.call(yAxis109)
+
+  var layers109 = g109.selectAll('.layer').data(layers109)
+
+  layers109.enter().append('g').attr('class', 'layer')
+
+  layers109.exit().remove()
+
+  layers109.style('fill', function (d) {
+    return colorScale109(d.key)
+  })
+
+  var bars109 = layers109.selectAll('rect').data(function (d) {
+    return d.values
+  })
+
+  bars109.enter().append('rect')
+
+  bars109.exit().remove()
+
+  bars109
+    .attr('x', function (d) { return xScale109(d[xColumn109]); })
+    .attr('y', function (d) { return yScale109(d.y0 + d.y); })
+    .attr('width', xScale109.rangeBand())
+    .attr('height', function (d) { return innerHeight109 - yScale109(d.y); })
+
+  colorLegendG109.call(colorLegend109)
+}
+function type109 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('religionByCountryTop5.csv', type109, render109)
