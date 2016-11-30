@@ -354,3 +354,47 @@ function type105 (d) {
 }
 
 d3.csv('religionByCountryTop5.csv', type105, render105)
+
+// example-106
+function render106 (data) {
+  var nested106 = d3.nest()
+    .key(function (d) { return d.country })
+    .entries(data)
+
+  d3.select('#example-106').append('pre')
+    .text(JSON.stringify(nested106, null, 2))
+}
+
+function type106 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('religionByCountryTop5.csv', type106, render106)
+
+// example-107
+var layerColumn107 = 'religion'
+var yColumn107 = 'population'
+var xColumn107 = 'country'
+
+function render107 (data) {
+  var nested107 = d3.nest()
+    .key(function (d) { return d[layerColumn107]; })
+    .entries(data)
+
+  var stack107 = d3.layout.stack()
+    .y(function (d) { return d[yColumn107]; })
+    .values(function (d) { return d.values; })
+
+  var layers107 = stack107(nested107)
+
+  d3.select('#example-107').append('pre')
+    .text(JSON.stringify(layers107, null, 2))
+}
+
+function type107 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('religionByCountryTop5.csv', type107, render107)

@@ -19,6 +19,8 @@
         <li><a href="#stack-layout">Stacked layout</a></li>
         <li><a href="#splitting-rect">Splitting a rectangle</a></li>
         <li><a href="#dimensions-split">Adding dimensions to split rectangles</a></li>
+        <li><a href="#d3-nest">Introducing D3.nest</a></li>
+        <li><a href="#nest-stack">Nest & stack</a></li>
 			</ul>
 		</div>
 		<div class="col-md-10 col-xs-12 main-container">
@@ -570,6 +572,72 @@
             &nbsp;} <br>
             <br>
             &nbsp;d3.csv("religionByCountryTop5.csv", type, render); <br>
+            <br>
+            &lt;/script&gt;
+          </code>
+				</div>
+      </div>
+      <br>
+      <div id="d3-nest">
+				<h4>Introducing D3.nest</h4>
+				<div class="row panel">
+          <div id="example-106"></div>
+          <br>
+					<p>index.html</p>
+          <code>
+            &lt;script&gt; <br>
+            <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;var nested = d3.nest() <br>
+            &nbsp;  .key(function (d){ return d.country; }) <br>
+            &nbsp;  .entries(data); <br>
+            <br>
+            &nbsp;d3.select("body").append("pre") <br>
+            &nbsp;  .text(JSON.stringify(nested, null, 2)); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("religionByCountryTop5.csv", type, render); <br>
+            <br>
+            &lt;/script&gt;
+          </code>
+				</div>
+      </div>
+      <br>
+      <div id="nest-stack">
+				<h4>Nest and stack</h4>
+				<div class="row panel">
+          <div id="example-107"></div>
+          <br>
+					<p>index.html</p>
+          <code>
+            &lt;script&gt; <br>
+            <br>
+            &nbsp;function render (data) { <br>
+            &nbsp;&nbsp;var nested = d3.nest() <br>
+            &nbsp;&nbsp;  .key(function (d) { return d[layerColumn]; }) <br>
+            &nbsp;&nbsp;  .entries(data) <br>
+            <br>
+            &nbsp;&nbsp;var stack = d3.layout.stack() <br>
+            &nbsp;&nbsp;  .y(function (d) { return d[yColumn]; }) <br>
+            &nbsp;&nbsp;  .values(function (d) { return d.values; }) <br>
+            <br>
+            &nbsp;&nbsp;var layers = stack(nested) <br>
+            <br>
+            &nbsp;&nbsp;d3.select('body').append('pre') <br>
+            &nbsp;&nbsp;  .text(JSON.stringify(layers, null, 2)) <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type (d) { <br>
+            &nbsp;&nbsp;d.population = +d.population <br>
+            &nbsp;&nbsp;return d <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv('religionByCountryTop5.csv', type, render) <br>
             <br>
             &lt;/script&gt;
           </code>
