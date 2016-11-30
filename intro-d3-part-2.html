@@ -21,6 +21,7 @@
         <li><a href="#dimensions-split">Adding dimensions to split rectangles</a></li>
         <li><a href="#d3-nest">Introducing D3.nest</a></li>
         <li><a href="#nest-stack">Nest & stack</a></li>
+        <li><a href="#stacked-bars">Stacked bars</a></li>
 			</ul>
 		</div>
 		<div class="col-md-10 col-xs-12 main-container">
@@ -618,10 +619,12 @@
             &lt;script&gt; <br>
             <br>
             &nbsp;function render (data) { <br>
+            &nbsp;&nbsp;// Assign key values and get entries from CSV <br>
             &nbsp;&nbsp;var nested = d3.nest() <br>
             &nbsp;&nbsp;  .key(function (d) { return d[layerColumn]; }) <br>
             &nbsp;&nbsp;  .entries(data) <br>
             <br>
+            &nbsp;&nbsp;// assign y0 & values from elements of the CSV array<br>
             &nbsp;&nbsp;var stack = d3.layout.stack() <br>
             &nbsp;&nbsp;  .y(function (d) { return d[yColumn]; }) <br>
             &nbsp;&nbsp;  .values(function (d) { return d.values; }) <br>
@@ -638,6 +641,117 @@
             &nbsp;} <br>
             <br>
             &nbsp;d3.csv('religionByCountryTop5.csv', type, render) <br>
+            <br>
+            &lt;/script&gt;
+          </code>
+				</div>
+      </div>
+      <br>
+      <div id="stacked-bars">
+				<h4>Stacked bars</h4>
+				<div class="row panel">
+          <div id="example-108"></div>
+          <br>
+					<p>index.html</p>
+          <code>
+            &lt;script&gt; <br>
+            <br>
+            &nbsp;var outerWidth = 500; <br>
+            &nbsp;var outerHeight = 250; <br>
+            &nbsp;var margin = { left: 90, top: 30, right: 30, bottom: 40 }; <br>
+            &nbsp;var barPadding = 0.2; <br>
+            <br>
+            &nbsp;var xColumn = "country"; <br>
+            &nbsp;var yColumn = "population"; <br>
+            &nbsp;var colorColumn = "religion"; <br>
+            &nbsp;var layerColumn = colorColumn; <br>
+            <br>
+            &nbsp;var innerWidth  = outerWidth  - margin.left - margin.right; <br>
+            &nbsp;var innerHeight = outerHeight - margin.top  - margin.bottom; <br>
+            <br>
+            &nbsp;var svg = d3.select("body").append("svg") <br>
+            &nbsp;  .attr("width",  outerWidth) <br>
+            &nbsp;  .attr("height", outerHeight); <br>
+            &nbsp;var g = svg.append("g") <br>
+            &nbsp;  .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); <br>
+            &nbsp;var xAxisG = g.append("g") <br>
+            &nbsp;  .attr("class", "x axis") <br>
+            &nbsp;  .attr("transform", "translate(0," + innerHeight + ")"); <br>
+            &nbsp;var yAxisG = g.append("g") <br>
+            &nbsp;  .attr("class", "y axis"); <br>
+            <br>
+            &nbsp;var xScale = d3.scale.ordinal().rangeBands([0, innerWidth], barPadding); <br>
+            &nbsp;var yScale = d3.scale.linear().range([innerHeight, 0]); <br>
+            &nbsp;var colorScale = d3.scale.category10(); <br>
+            <br>
+            &nbsp;// Use a modified SI formatter that uses "B" for Billion. <br>
+            &nbsp;var siFormat = d3.format("s"); <br>
+            &nbsp;var customTickFormat = function (d){ <br>
+            &nbsp;  return siFormat(d).replace("G", "B"); <br>
+            &nbsp;};
+            <br>
+            &nbsp;var xAxis = d3.svg.axis().scale(xScale).orient("bottom") <br>
+            &nbsp;  .outerTickSize(0); <br>
+            &nbsp;var yAxis = d3.svg.axis().scale(yScale).orient("left") <br>
+            &nbsp;  .ticks(5) <br>
+            &nbsp;  .tickFormat(customTickFormat) <br>
+            &nbsp;  .outerTickSize(0); <br>
+            <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;&nbsp;var nested = d3.nest() <br>
+            &nbsp;&nbsp;&nbsp;.key(function (d){ return d[layerColumn]; }) <br>
+            &nbsp;&nbsp;&nbsp;.entries(data) <br>
+            &nbsp;&nbsp;var stack = d3.layout.stack() <br>
+            &nbsp;&nbsp;&nbsp;.y(function (d){ return d[yColumn]; }) <br>
+            &nbsp;&nbsp;&nbsp;.values(function (d){ return d.values; }); <br>
+            &nbsp;&nbsp;var layers = stack(nested); <br>
+            <br>
+            &nbsp;&nbsp;xScale.domain(layers[0].values.map(function (d){ <br>
+            &nbsp;&nbsp;  return d[xColumn]; <br>
+            &nbsp;&nbsp;})); <br>
+            &nbsp;&nbsp;yScale.domain([ <br>
+            &nbsp;&nbsp;  0, <br>
+            &nbsp;&nbsp;  d3.max(layers, function (layer){ <br>
+            &nbsp;&nbsp;&nbsp;    return d3.max(layer.values, function (d){ <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;      return d.y0 + d.y; <br>
+            &nbsp;&nbsp;&nbsp;    }); <br>
+            &nbsp;&nbsp;  }) <br>
+            &nbsp;&nbsp;]); <br>
+            &nbsp;&nbsp;colorScale.domain(layers.map(function (layer){ <br>
+            &nbsp;&nbsp;  return layer.key; <br>
+            &nbsp;&nbsp;})); <br>
+              <br>
+            &nbsp;  xAxisG.call(xAxis); <br>
+            &nbsp;  yAxisG.call(yAxis); <br>
+              <br>
+            &nbsp;  var layerGroups = g.selectAll(".layer").data(layers); <br>
+            &nbsp;  layerGroups.enter().append("g").attr("class", "layer"); <br>
+            &nbsp;  layerGroups.exit().remove(); <br>
+            &nbsp;  layerGroups.style("fill", function (d){ <br>
+            &nbsp;&nbsp;    return colorScale(d.key); <br>
+            &nbsp;  }); <br>
+              <br>
+            &nbsp;  var bars = layerGroups.selectAll("rect").data(function (d){ <br>
+            &nbsp;&nbsp;    return d.values; <br>
+            &nbsp;  }); <br>
+              <br>
+            &nbsp;  bars.enter().append("rect") <br>
+              <br>
+            &nbsp;  bars.exit().remove(); <br>
+              <br>
+            &nbsp;  bars <br>
+            &nbsp;    .attr("x", function (d){ return xScale(d[xColumn]); }) <br>
+            &nbsp;    .attr("y", function (d){ return yScale(d.y0 + d.y); }) <br>
+            &nbsp;    .attr("width", xScale.rangeBand()) <br>
+            &nbsp;    .attr("height", function (d){ return innerHeight - yScale(d.y); }) <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("religionByCountryTop5.csv", type, render); <br>
             <br>
             &lt;/script&gt;
           </code>
