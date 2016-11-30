@@ -266,3 +266,91 @@ function type103 (d) {
 }
 
 d3.csv('religionWorldTotals.csv', type103, render103)
+
+// example-104
+var outerWidth104 = 500
+var outerHeight104 = 250
+var margin104 = { left: 90, top: 30, right: 30, bottom: 40 }
+var barPadding104 = 0.2
+
+var xColumn104 = 'region'
+var yColumn104 = 'population'
+var colorColumn104 = 'religion'
+
+var innerWidth104 = outerWidth104 - margin104.left - margin104.right
+var innerHeight104 = outerHeight104 - margin104.top - margin104.bottom
+
+var svg104 = d3.select('#example-104').append('svg')
+  .attr('width', outerWidth104)
+  .attr('height', outerHeight104)
+var g104 = svg104.append('g')
+  .attr('transform', 'translate(' + margin104.left + ',' + margin104.top + ')')
+var xAxisG104 = g104.append('g')
+  .attr('class', 'x axis')
+  .attr('transform', 'translate(0,' + innerHeight104 + ')')
+var yAxisG104 = g104.append('g')
+  .attr('class', 'y axis')
+
+var xScale104 = d3.scale.ordinal().rangeBands([0, innerWidth104], barPadding104)
+var yScale104 = d3.scale.linear().range([innerHeight104, 0])
+var colorScale104 = d3.scale.category10()
+
+// Use a modified SI formatter that uses "B" for Billion.
+var siFormat104 = d3.format('s')
+var customTickFormat104 = function (d) {
+  return siFormat104(d).replace('G', 'B')
+}
+
+var xAxis104 = d3.svg.axis().scale(xScale104).orient('bottom')
+  .outerTickSize(0)
+var yAxis104 = d3.svg.axis().scale(yScale104).orient('left')
+  .ticks(5)
+  .tickFormat(customTickFormat104)
+  .outerTickSize(0)
+
+function render104 (data) {
+  colorScale104.domain(data.map(function (d) { return d[colorColumn104]; }))
+  var stack104 = d3.layout.stack()
+    .y(function (d) { return d[yColumn104]; })
+    .values(function (d) { return [d]; })
+
+  var stacked104 = stack104(data)
+
+  xScale104.domain(stacked104.map(function (d) { return d[xColumn104]; }))
+  yScale104.domain([0, d3.max(stacked104, function (d) { return d.y0 + d.y; })])
+
+  xAxisG104.call(xAxis104)
+  yAxisG104.call(yAxis104)
+
+  var bars104 = g104.selectAll('rect').data(stacked104)
+  bars104.enter().append('rect')
+
+  bars104
+    .attr('x', function (d) { return xScale104(d[xColumn104]); })
+    .attr('y', function (d) { return yScale104(d.y0 + d.y); })
+    .attr('width', xScale104.rangeBand())
+    .attr('height', function (d) { return innerHeight104 - yScale104(d.y); })
+    .attr('fill', function (d) { return colorScale104(d[colorColumn104]); })
+
+  bars104.exit().remove()
+}
+
+function type104 (d) {
+  d.region = 'World'
+  d.population = +d.population
+  return d
+}
+
+d3.csv('religionWorldTotals.csv', type104, render104)
+
+// example-105
+function render105 (data) {
+  d3.select('#example-105').append('pre')
+    .text(JSON.stringify(data, null, 2))
+}
+function type105 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('religionByCountryTop5.csv', type105, render105)

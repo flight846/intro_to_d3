@@ -17,6 +17,8 @@
         <li><a href="#tilt-axis-text">Tilting axis text</a></li>
         <li><a href="#adding-colors-bar">Adding colors</a></li>
         <li><a href="#stack-layout">Stacked layout</a></li>
+        <li><a href="#splitting-rect">Splitting a rectangle</a></li>
+        <li><a href="#dimensions-split">Adding dimensions to split rectangles</a></li>
 			</ul>
 		</div>
 		<div class="col-md-10 col-xs-12 main-container">
@@ -403,7 +405,9 @@
             &nbsp;var yColumn = "population"; <br>
             <br>
             &nbsp;function render(data){ <br>
+            &nbsp;&nbsp;// create new instance of layout <br>
             &nbsp;&nbsp;var stack = d3.layout.stack() <br>
+            &nbsp;&nbsp;&nbsp;// get y values <br>
             &nbsp;&nbsp;&nbsp;.y(function (d) { <br>
             &nbsp;&nbsp;&nbsp;&nbsp;return d[yColumn]; <br>
             &nbsp;&nbsp;&nbsp;}) <br>
@@ -426,6 +430,149 @@
             <br>
             &lt;/script&gt;
 					</code>
+				</div>
+      </div>
+      <br>
+      <div id="splitting-rect">
+				<h4>Splitting a rectangle</h4>
+				<div class="row panel">
+          <div id="example-104"></div>
+          <br>
+					<p>index.html</p>
+					<code>
+            &lt;style&gt; <br>
+            &nbsp;.axis text { <br>
+            &nbsp;&nbsp;font-family: 'Open Sans', sans-serif; <br>
+            &nbsp;&nbsp;font-size: 16pt; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;.axis .label { <br>
+            &nbsp;&nbsp;font-size: 20pt; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;.axis path, .axis line { <br>
+            &nbsp;&nbsp;fill: none; <br>
+            &nbsp;&nbsp;stroke: #000; <br>
+            &nbsp;&nbsp;shape-rendering: crispEdges; <br>
+            &nbsp;} <br>
+            &lt;/style&gt; <br>
+            <br>
+            &lt;script&gt; <br>
+            <br>
+            &nbsp;// config vars <br>
+            &nbsp;var outerWidth = 500; <br>
+            &nbsp;var outerHeight = 250; <br>
+            &nbsp;var margin = { left: 90, top: 30, right: 30, bottom: 40 }; <br>
+            &nbsp;var barPadding = 0.2; <br>
+            <br>
+            &nbsp;// set x,y data <br>
+            &nbsp;var xColumn = "region"; <br>
+            &nbsp;var yColumn = "population"; <br>
+            &nbsp;var colorColumn = "religion"; <br>
+            <br>
+            &nbsp;// set inner margin <br>
+            &nbsp;var innerWidth  = outerWidth  - margin.left - margin.right; <br>
+            &nbsp;var innerHeight = outerHeight - margin.top  - margin.bottom; <br>
+            <br>
+            &nbsp;// create svg <br>
+            &nbsp;var svg = d3.select("body").append("svg") <br>
+            &nbsp;  .attr("width",  outerWidth) <br>
+            &nbsp;  .attr("height", outerHeight); <br>
+            &nbsp;var g = svg.append("g") <br>
+            &nbsp;  .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); <br>
+            &nbsp;var xAxisG = g.append("g") <br>
+            &nbsp;  .attr("class", "x axis") <br>
+            &nbsp;  .attr("transform", "translate(0," + innerHeight + ")"); <br>
+            &nbsp;var yAxisG = g.append("g") <br>
+            &nbsp;  .attr("class", "y axis"); <br>
+            <br>
+            &nbsp;// set x, y scale range <br>
+            &nbsp;var xScale = d3.scale.ordinal().rangeBands([0, innerWidth], barPadding); <br>
+            &nbsp;var yScale = d3.scale.linear().range([innerHeight, 0]); <br>
+            &nbsp;var colorScale = d3.scale.category10(); <br>
+            <br>
+            &nbsp;// Use a modified SI formatter that uses "B" for Billion. <br>
+            &nbsp;var siFormat = d3.format("s"); <br>
+            &nbsp;var customTickFormat = function (d){ <br>
+            &nbsp;  return siFormat(d).replace("G", "B"); <br>
+            &nbsp;}; <br>
+            <br>
+            &nbsp;// Instantiate axes <br>
+            &nbsp;var xAxis = d3.svg.axis().scale(xScale).orient("bottom") <br>
+            &nbsp;  .outerTickSize(0); <br>
+            &nbsp;var yAxis = d3.svg.axis().scale(yScale).orient("left") <br>
+            &nbsp;  .ticks(5) <br>
+            &nbsp;  .tickFormat(customTickFormat) <br>
+            &nbsp;  .outerTickSize(0); <br>
+            <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;&nbsp;colorScale.domain(data.map(function (d){ return d[colorColumn]; })); <br>
+            <br>
+            &nbsp;&nbsp;// instantiate stack layout data <br>
+            &nbsp;&nbsp;var stack = d3.layout.stack() <br>
+            &nbsp;&nbsp;  .y(function (d){ return d[yColumn]; }) <br>
+            &nbsp;&nbsp;  .values(function (d){ return [d]; }); <br>
+            <br>
+            &nbsp;&nbsp;var stacked = stack(data); <br>
+            &nbsp;&nbsp;xScale.domain(stacked.map(function (d){ return d[xColumn]; })); <br>
+            &nbsp;&nbsp;yScale.domain([0, d3.max(stacked, function (d){ return d.y0 + d.y; })]); <br>
+            <br>
+            &nbsp;&nbsp;// render axes <br>
+            &nbsp;&nbsp;xAxisG.call(xAxis); <br>
+            &nbsp;&nbsp;yAxisG.call(yAxis); <br>
+            <br>
+            &nbsp;&nbsp;var bars = g.selectAll("rect").data(stacked); <br>
+            &nbsp;&nbsp;// enter phase <br>
+            &nbsp;&nbsp;bars.enter().append("rect") <br>
+            <br>
+            &nbsp;&nbsp;// update phase <br>
+            &nbsp;&nbsp;bars <br>
+            &nbsp;&nbsp;  .attr("x", function (d){ return xScale(d[xColumn]); }) <br>
+            &nbsp;&nbsp;  .attr("y", function (d){ return yScale(d.y0 + d.y); }) <br>
+            &nbsp;&nbsp;  .attr("width", xScale.rangeBand()); <br>
+            &nbsp;&nbsp;  .attr("height", function (d){ return innerHeight - yScale(d.y); }) <br>
+            &nbsp;&nbsp;  .attr("fill", function (d){ return colorScale(d[colorColumn]); }); <br>
+            <br>
+            &nbsp;&nbsp;// exit phase <br>
+            &nbsp;&nbsp;bars.exit().remove(); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.region = "World"; <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("religionWorldTotals.csv", type, render); <br>
+            <br>
+            &lt;/script&gt;
+					</code>
+				</div>
+      </div>
+      <br>
+      <div id="dimensions-split">
+				<h4>Adding another dimension to split rectangle</h4>
+				<div class="row panel">
+          <div id="example-105"></div>
+          <br>
+					<p>index.html</p>
+          <code>
+            &lt;script&gt; <br>
+            <br>
+            &nbsp;function render (data) { <br>
+            &nbsp;  d3.select("body").append("pre") <br>
+            &nbsp;    .text(JSON.stringify(data, null, 2)); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type (d) { <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("religionByCountryTop5.csv", type, render); <br>
+            <br>
+            &lt;/script&gt;
+          </code>
 				</div>
       </div>
       <div class="row">
