@@ -526,7 +526,7 @@ var yAxisG109 = g109.append('g')
   .attr('class', 'y axis')
 var colorLegendG109 = g109.append('g')
   .attr('class', 'color-legend')
-  .attr('transform', 'translate(235, 0)')
+  .attr('transform', 'translate(260, 0)')
 
 var xScale109 = d3.scale.ordinal().rangeBands([0, innerWidth109], barPadding109)
 var yScale109 = d3.scale.linear().range([innerHeight109, 0])
@@ -577,17 +577,17 @@ function render109 (data) {
   xAxisG109.call(xAxis109)
   yAxisG109.call(yAxis109)
 
-  var layers109 = g109.selectAll('.layer').data(layers109)
+  var layerGroups109 = g109.selectAll('.layer').data(layers109)
 
-  layers109.enter().append('g').attr('class', 'layer')
+  layerGroups109.enter().append('g').attr('class', 'layer')
 
-  layers109.exit().remove()
+  layerGroups109.exit().remove()
 
-  layers109.style('fill', function (d) {
+  layerGroups109.style('fill', function (d) {
     return colorScale109(d.key)
   })
 
-  var bars109 = layers109.selectAll('rect').data(function (d) {
+  var bars109 = layerGroups109.selectAll('rect').data(function (d) {
     return d.values
   })
 
