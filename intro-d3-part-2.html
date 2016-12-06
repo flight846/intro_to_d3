@@ -760,7 +760,7 @@
       </div>
       <br>
       <div id="color-legend">
-				<h4>Adding color lengend</h4>
+				<h4>Adding color legend</h4>
 				<div class="row panel">
           <div id="example-109"></div>
           <br>
@@ -772,6 +772,9 @@
             &nbsp;&nbsp;font-size: 10pt; <br>
             &nbsp;}  <br>
             &lt;/style&gt; <br>
+            <br>
+            &lt;script src="//cdnjs.cloudflare.com/ajax/libs/d3-legend/1.1.0/d3-legend.js"&gt;&lt;/script&gt;
+            <br>
             &lt;script&gt; <br>
             <br>
             &nbsp;var outerWidth = 500; <br>
@@ -816,6 +819,7 @@
             &nbsp;  .ticks(5) <br>
             &nbsp;  .tickFormat(customTickFormat) <br>
             &nbsp;  .outerTickSize(0); <br>
+            <br>
             &nbsp;var colorLegend = d3.legend.color() <br>
             &nbsp;  .scale(colorScale) <br>
             &nbsp;  .shapePadding(3) <br>
@@ -827,14 +831,17 @@
             &nbsp;  var nested = d3.nest() <br>
             &nbsp;&nbsp;    .key(function (d){ return d[layerColumn]; }) <br>
             &nbsp;&nbsp;    .entries(data) <br>
+            <br>
             &nbsp;  var stack = d3.layout.stack() <br>
             &nbsp;&nbsp;    .y(function (d){ return d[yColumn]; }) <br>
             &nbsp;&nbsp;    .values(function (d){ return d.values; }); <br>
+            <br>
             &nbsp;  var layers = stack(nested); <br>
             <br>
             &nbsp;  xScale.domain(layers[0].values.map(function (d){ <br>
             &nbsp;&nbsp;    return d[xColumn]; <br>
             &nbsp;  })); <br>
+            <br>
             &nbsp;  yScale.domain([ <br>
             &nbsp;&nbsp;    0, <br>
             &nbsp;&nbsp;    d3.max(layers, function (layer){ <br>
@@ -843,25 +850,24 @@
             &nbsp;&nbsp;&nbsp;      }); <br>
             &nbsp;&nbsp;    }) <br>
             &nbsp;  ]); <br>
+            <br>
             &nbsp;  colorScale.domain(layers.map(function (layer){ <br>
             &nbsp;&nbsp;    return layer.key; <br>
             &nbsp;  })); <br>
-              <br>
+            <br>
             &nbsp;  xAxisG.call(xAxis); <br>
             &nbsp;  yAxisG.call(yAxis); <br>
-              <br>
-            &nbsp;  var layers = g.selectAll(".layer").data(layers); <br>
             <br>
-            &nbsp;  layers.enter().append("g").attr("class", "layer"); <br>
-            <br>
-            &nbsp;  layers.exit().remove(); <br>
-            <br>
-            &nbsp;  layers.style("fill", function (d){ <br>
+            &nbsp;  // Layer group for each religion
+            &nbsp;  var layerGroups = g.selectAll(".layer").data(layers); <br>
+            &nbsp;  layerGroups.enter().append("g").attr("class", "layer"); <br>
+            &nbsp;  layerGroups.exit().remove(); <br>
+            &nbsp;  layerGroups.style("fill", function (d){ <br>
             &nbsp;&nbsp;    return colorScale(d.key); <br>
             &nbsp;  }); <br>
-              <br>
-            &nbsp;  var bars = layers.selectAll("rect").data(function (d){ <br>
-            &nbsp;&nbsp;    return d.values; <br>
+            <br>
+            &nbsp;  var bars = layers.selectAll("rect").data(function (layer){ <br>
+            &nbsp;&nbsp;    return layer.values; <br>
             &nbsp;  }); <br>
               <br>
             &nbsp;  bars.enter().append("rect") <br>
