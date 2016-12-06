@@ -609,3 +609,111 @@ function type109 (d) {
 }
 
 d3.csv('religionByCountryTop5.csv', type109, render109)
+
+// example-110
+var outerWidth110 = 500
+var outerHeight110 = 250
+var margin110 = { left: 90, top: 30, right: 30, bottom: 40 }
+var barPadding110 = 0.2
+
+var xColumn110 = 'country'
+var yColumn110 = 'population'
+var colorColumn110 = 'religion'
+var layerColumn110 = colorColumn110
+
+var innerWidth110 = outerWidth110 - margin110.left - margin110.right
+var innerHeight110 = outerHeight110 - margin110.top - margin110.bottom
+
+var svg110 = d3.select('#example-110').append('svg')
+  .attr('width', outerWidth110)
+  .attr('height', outerHeight110)
+var g110 = svg110.append('g')
+  .attr('transform', 'translate(' + margin110.left + ',' + margin110.top + ')')
+var xAxisG110 = g110.append('g')
+  .attr('class', 'x axis')
+  .attr('transform', 'translate(0,' + innerHeight110 + ')')
+var yAxisG110 = g110.append('g')
+  .attr('class', 'y axis')
+var colorLegendG110 = g110.append('g')
+  .attr('class', 'color-legend')
+  .attr('transform', 'translate(235, 0)')
+
+var xScale110 = d3.scale.ordinal().rangeBands([0, innerWidth110], barPadding110)
+var yScale110 = d3.scale.linear().range([innerHeight110, 0])
+var colorScale110 = d3.scale.category10()
+
+var xAxis110 = d3.svg.axis().scale(xScale110).orient('bottom')
+  .outerTickSize(0)
+var yAxis110 = d3.svg.axis().scale(yScale110).orient('left')
+  .ticks(5)
+  .tickFormat(d3.format('s'))
+  .outerTickSize(0)
+var colorLegend110 = d3.legend.color()
+  .scale(colorScale110)
+  .shapePadding(2)
+  .shapeWidth(15)
+  .shapeHeight(15)
+  .labelOffset(4)
+
+function render110 (data) {
+  var nested110 = d3.nest()
+    .key(function (d) { return d[layerColumn110]; })
+    .entries(data)
+  var stack110 = d3.layout.stack()
+    .y(function (d) { return d[yColumn110]; })
+    .values(function (d) { return d.values; })
+
+  var layers110 = stack110(nested110)
+
+  xScale110.domain(layers110[0].values.map(function (d) {
+    return d[xColumn110]
+  }))
+
+  yScale110.domain([
+    0,
+    d3.max(layers110, function (layer) {
+      return d3.max(layer.values, function (d) {
+        return d.y
+      })
+    })
+  ])
+
+  colorScale110.domain(layers110.map(function (layer) {
+    return layer.key
+  }))
+
+  xAxisG110.call(xAxis110)
+  yAxisG110.call(yAxis110)
+
+  var layerGroups110 = g110.selectAll('.layer').data(layers110)
+  layerGroups110.enter().append('g').attr('class', 'layer')
+  layerGroups110.exit().remove()
+  layerGroups110.style('fill', function (d) {
+    return colorScale110(d.key)
+  })
+
+  var bars110 = layerGroups110.selectAll('rect').data(function (d) {
+    return d.values
+  })
+  var barWidth110 = xScale110.rangeBand() / colorScale110.domain().length
+
+  bars110.enter().append('rect')
+  bars110.exit().remove()
+
+  bars110
+    .attr('x', function (d, i, j) {
+      return xScale110(d[xColumn110]) + barWidth110 * j
+    })
+    .attr('y', function (d) { return yScale110(d.y); })
+    .attr('width', barWidth110)
+    .attr('height', function (d) { return innerHeight110 - yScale110(d.y); })
+
+  colorLegendG110.call(colorLegend110)
+}
+
+function type110 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('religionByCountryTop5.csv', type110, render110)
