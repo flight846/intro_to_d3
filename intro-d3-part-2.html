@@ -27,6 +27,9 @@
         <li><a href="#circle-countries">Circles for each countries</a></li>
         <li><a href="#circle-religions">Circles for each religions</a></li>
         <li><a href="#circle-colors">Adding colors to circles</a></li>
+        <li><a href="#intro-piechart">Introducing pie chart</a></li>
+        <li><a href="#arc-svg">D3.svg.arc</a></li>
+        <li><a href="#pie-chart">Pie chart</a></li>
 			</ul>
 		</div>
 		<div class="col-md-10 col-xs-12 main-container">
@@ -1247,6 +1250,136 @@
             <br>
             &nbsp;d3.csv("religionWorldTotals.csv", type, render); <br>
             <br>
+            &lt;/script&gt;
+          </code>
+				</div>
+      </div>
+      <br>
+      <div id="intro-piechart">
+				<h4>Introducing pie chart</h4>
+				<div class="row panel">
+          <div id="example-114"></div>
+          <br>
+					<p>index.html</p>
+          <code>
+            &lt;script&gt; <br>
+            <br>
+            &nbsp;var sliceSizeColumn = "population"; <br>
+            <br>
+            &nbsp;// To use pie chart <br>
+            &nbsp;var pie = d3.layout.pie(); <br>
+            <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;  // accessor values to pie slices <br>
+            &nbsp;  pie.value(function(d) { <br>
+            &nbsp;&nbsp;  return d[sliceSizeColumn]; <br>
+            &nbsp;&nbsp;}); <br>
+            <br>
+            &nbsp;  //invoking pie data <br>
+            &nbsp;  var pieData = pie(data); <br>
+            &nbsp;  d3.select("body").append("pre") <br>
+            &nbsp;&nbsp;  .text(JSON.stringify(pieData, null, 2)); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("religionWorldTotals.csv", type, render); <br>
+                  <br>
+            &lt;/script&gt;
+          </code>
+				</div>
+      </div>
+      <br>
+      <div id="arc-svg">
+				<h4>D3.svg.arg</h4>
+				<div class="row panel">
+          <div id="example-115"></div>
+          <ul>
+            <li>D3.svg.arc()</li>
+            <li>Converting arc to SVG path</li>
+            <li>Can be used as the 'd' attribute in SVG paths</li>
+            <li>This is a single date example</li>
+          </ul>
+					<p>index.html</p>
+          <code>
+            &lt;script&gt; <br>
+            <br>
+            &nbsp;var sliceSizeColumn = "population"; <br>
+            &nbsp;var pie = d3.layout.pie(); <br>
+            <br>
+            &nbsp;// instance of arc path generator <br>
+            &nbsp;var arc = d3.svg.arc(); <br>
+            <br>
+            &nbsp;// if inner radius is 0, it is a pie chart. Else a donut chart <br>
+            &nbsp;arc.outerRadius(100); <br>
+            &nbsp;arc.innerRadius(0); <br>
+            <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;  pie.value(function(d) { <br>
+            &nbsp;&nbsp; return d[sliceSizeColumn]; <br>
+            &nbsp;  }); <br>
+            <br>
+            &nbsp;  var pieData = pie(data); <br>
+            &nbsp;  var singleSlice = pieData[0]; <br>
+            &nbsp;  var svgPathString = arc(singleSlice); <br>
+            <br>
+            &nbsp;  d3.select("body").append("pre") <br>
+            &nbsp;&nbsp; .text(JSON.stringify(svgPathString, null, 2)); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("religionWorldTotals.csv", type, render); <br>
+                  <br>
+            &lt;/script&gt;
+          </code>
+				</div>
+      </div>
+      <br>
+      <div id="pie-chart">
+				<h4>Pie chart</h4>
+				<div class="row panel">
+          <div id="example-116"></div>
+					<p>index.html</p>
+          <code>
+            &lt;script&gt; <br>
+            <br>
+            &nbsp;var sliceSizeColumn = "population"; <br>
+            &nbsp;var pie = d3.layout.pie(); <br>
+            <br>
+            &nbsp;// instance of arc path generator <br>
+            &nbsp;var arc = d3.svg.arc(); <br>
+            <br>
+            &nbsp;// if inner radius is 0, it is a pie chart. Else a donut chart <br>
+            &nbsp;arc.outerRadius(100); <br>
+            &nbsp;arc.innerRadius(0); <br>
+            <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;  pie.value(function(d) { <br>
+            &nbsp;&nbsp; return d[sliceSizeColumn]; <br>
+            &nbsp;  }); <br>
+            <br>
+            &nbsp;  var pieData = pie(data); <br>
+            &nbsp;  var singleSlice = pieData[0]; <br>
+            &nbsp;  var svgPathString = arc(singleSlice); <br>
+            <br>
+            &nbsp;  d3.select("body").append("pre") <br>
+            &nbsp;&nbsp; .text(JSON.stringify(svgPathString, null, 2)); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("religionWorldTotals.csv", type, render); <br>
+                  <br>
             &lt;/script&gt;
           </code>
 				</div>
