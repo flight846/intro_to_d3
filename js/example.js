@@ -717,3 +717,178 @@ function type110 (d) {
 }
 
 d3.csv('religionByCountryTop5.csv', type110, render110)
+
+// example-111
+var outerWidth111 = 500
+var outerHeight111 = 250
+var margin111 = { left: 90, top: 60, right: 30, bottom: 60 }
+var barPadding111 = 0.2
+
+var xColumn111 = 'country'
+var radiusColumn111 = 'population'
+var radiusMax111 = 40
+
+var innerWidth111 = outerWidth111 - margin111.left - margin111.right
+var innerHeight111 = outerHeight111 - margin111.top - margin111.bottom
+
+var svg111 = d3.select('#example-111').append('svg')
+  .attr('width', outerWidth111)
+  .attr('height', outerHeight111)
+var g111 = svg111.append('g')
+  .attr('transform', 'translate(' + margin111.left + ',' + margin111.top + ')')
+var xAxisG111 = g111.append('g')
+  .attr('class', 'x axis')
+  .attr('transform', 'translate(0,' + innerHeight111 + ')')
+var xScale111 = d3.scale.ordinal().rangePoints([0, innerWidth111], barPadding111)
+var radiusScale111 = d3.scale.sqrt().range([0, radiusMax111])
+
+// Use a modified SI formatter that uses "B" for Billion.
+var siFormat111 = d3.format('s')
+var customTickFormat111 = function (d) {
+  return siFormat111(d).replace('G', 'B')
+}
+
+var xAxis111 = d3.svg.axis().scale(xScale111).orient('bottom')
+  .outerTickSize(0)
+
+function render111 (data) {
+  xScale111.domain(data.map(function (d) { return d[xColumn111]; }))
+  radiusScale111.domain([0, d3.max(data, function (d) { return d[radiusColumn111]; })])
+
+  xAxisG111.call(xAxis111)
+
+  var circles111 = g111.selectAll('circle').data(data)
+  circles111.enter().append('circle')
+  circles111
+    .attr('cx', function (d) { return xScale111(d[xColumn111]); })
+    .attr('cy', innerHeight111 / 2)
+    .attr('r', function (d) { return radiusScale111(d[radiusColumn111]); })
+  circles111.exit().remove()
+}
+
+function type111 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('populationByCountry2015.csv', type111, render111)
+
+// example-112
+var outerWidth112 = 500
+var outerHeight112 = 250
+var margin112 = { left: 90, top: 90, right: 30, bottom: 90 }
+var barPadding112 = 0.2
+
+var xColumn112 = 'religion'
+var radiusColumn112 = 'population'
+var radiusMax112 = 25
+
+var innerWidth112 = outerWidth112 - margin112.left - margin112.right
+var innerHeight112 = outerHeight112 - margin112.top - margin112.bottom
+
+var svg112 = d3.select('#example-112').append('svg')
+  .attr('width', outerWidth112)
+  .attr('height', outerHeight112)
+var g112 = svg112.append('g')
+  .attr('transform', 'translate(' + margin112.left + ',' + margin112.top + ')')
+var xAxisG112 = g112.append('g')
+  .attr('class', 'x axis')
+  .attr('transform', 'translate(0,' + innerHeight112 + ')')
+
+var xScale112 = d3.scale.ordinal().rangePoints([0, innerWidth112], barPadding112)
+var radiusScale112 = d3.scale.sqrt().range([0, radiusMax112])
+
+// Use a modified SI formatter that uses "B" for Billion.
+var siFormat112 = d3.format('s')
+var customTickFormat112 = function (d) {
+  return siFormat112(d).replace('G', 'B')
+}
+
+var xAxis112 = d3.svg.axis().scale(xScale112).orient('bottom')
+  .outerTickSize(0)
+
+function render112 (data) {
+  xScale112.domain(data.map(function (d) { return d[xColumn112]; }))
+  radiusScale112.domain([0, d3.max(data, function (d) { return d[radiusColumn112]; })])
+
+  xAxisG112
+    .call(xAxis112)
+    .selectAll('text')
+    .attr('dx', '-.8em')
+    .attr('dy', '1em')
+    .attr('transform', 'rotate(-20)')
+
+  var circles112 = g112.selectAll('circle').data(data)
+
+  circles112.enter().append('circle')
+
+  circles112
+    .attr('cx', function (d) { return xScale112(d[xColumn112]); })
+    .attr('cy', innerHeight112 / 2)
+    .attr('r', function (d) { return radiusScale112(d[radiusColumn112]); })
+
+  circles112.exit().remove()
+}
+function type112 (d) {
+  d.population = +d.population
+  return d
+}
+d3.csv('religionWorldTotals.csv', type112, render112)
+
+// example-113
+var outerWidth113 = 500
+var outerHeight113 = 250
+var margin113 = { left: 90, top: 90, right: 30, bottom: 90 }
+var barPadding113 = 0.2
+
+var xColumn113 = 'religion'
+var radiusColumn113 = 'population'
+var radiusMax113 = 25
+var colorColumn113 = 'religion'
+
+var innerWidth113 = outerWidth113 - margin113.left - margin113.right
+var innerHeight113 = outerHeight113 - margin113.top - margin113.bottom
+
+var svg113 = d3.select('#example-113').append('svg')
+  .attr('width', outerWidth113)
+  .attr('height', outerHeight113)
+var g113 = svg113.append('g')
+  .attr('transform', 'translate(' + margin113.left + ',' + margin113.top + ')')
+var xAxisG113 = g113.append('g')
+  .attr('class', 'x axis')
+  .attr('transform', 'translate(0,' + innerHeight113 + ')')
+
+var xScale113 = d3.scale.ordinal().rangePoints([0, innerWidth113], barPadding113)
+var radiusScale113 = d3.scale.sqrt().range([0, radiusMax113])
+var colorScale113 = d3.scale.category10()
+
+var xAxis113 = d3.svg.axis().scale(xScale113).orient('bottom')
+  .outerTickSize(0)
+
+function render113 (data) {
+  xScale113.domain(data.map(function (d) { return d[xColumn113]; }))
+  radiusScale113.domain([0, d3.max(data, function (d) { return d[radiusColumn113]; })])
+  colorScale113.domain(data.map(function (d) { return d[colorColumn113]; }))
+  xAxisG113
+    .call(xAxis113)
+    .selectAll("text")
+    .attr("dx", "-.8em")
+    .attr("dy", "1em")
+    .attr("transform", "rotate(-20)" );
+
+  var circles113 = g113.selectAll('circle').data(data)
+  circles113.enter().append('circle')
+  circles113
+    .attr('cx', function (d) { return xScale113(d[xColumn113]); })
+    .attr('cy', innerHeight113 / 2)
+    .attr('r', function (d) { return radiusScale113(d[radiusColumn113]); })
+    .attr("fill", function (d){ return colorScale113(d[colorColumn113]); });
+  circles113.exit().remove()
+}
+
+function type113 (d) {
+  d.population = +d.population
+  return d
+}
+
+d3.csv('religionWorldTotals.csv', type113, render113)
