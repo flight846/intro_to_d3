@@ -1350,35 +1350,66 @@
           <code>
             &lt;script&gt; <br>
             <br>
+            &nbsp;var outerWidth = 500; <br>
+            &nbsp;var outerHeight = 250; <br>
+            &nbsp;var margin = { left: 90, top: 30, right: 30, bottom: 30 }; <br>
+            &nbsp;var radiusMax = 80; <br>
+            <br>
+            &nbsp;var xColumn = "name"; <br>
             &nbsp;var sliceSizeColumn = "population"; <br>
+            &nbsp;var colorColumn = "religion"; <br>
+            <br>
+            &nbsp;var innerWidth  = outerWidth  - margin.left - margin.right; <br>
+            &nbsp;var innerHeight = outerHeight - margin.top  - margin.bottom; <br>
+            <br>
+            &nbsp;var svg = d3.select("body").append("svg") <br>
+            &nbsp;  .attr("width",  outerWidth) <br>
+            &nbsp;  .attr("height", outerHeight); <br>
+            &nbsp;var g = svg.append("g") <br>
+            &nbsp;  .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); <br>
+            &nbsp;var xAxisG = g.append("g") <br>
+            &nbsp;  .attr("class", "x axis") <br>
+            &nbsp;  .attr("transform", "translate(0," + innerHeight + ")"); <br>
+            &nbsp;var pieG = g.append("g"); <br>
+            <br>
+            &nbsp;var xScale = d3.scale.ordinal().rangePoints([0, innerWidth]); <br>
+            &nbsp;var colorScale = d3.scale.category10(); <br>
+            <br>
+            &nbsp;var xAxis = d3.svg.axis().scale(xScale).orient("bottom") <br>
+            &nbsp;  .outerTickSize(0); <br>
+            <br>
             &nbsp;var pie = d3.layout.pie(); <br>
-            <br>
-            &nbsp;// instance of arc path generator <br>
             &nbsp;var arc = d3.svg.arc(); <br>
-            <br>
-            &nbsp;// if inner radius is 0, it is a pie chart. Else a donut chart <br>
-            &nbsp;arc.outerRadius(100); <br>
+            &nbsp;arc.outerRadius(radiusMax); <br>
             &nbsp;arc.innerRadius(0); <br>
             <br>
             &nbsp;function render(data){ <br>
-            &nbsp;  pie.value(function(d) { <br>
-            &nbsp;&nbsp; return d[sliceSizeColumn]; <br>
-            &nbsp;  }); <br>
+            &nbsp;  xScale.domain(data.map( function (d){ return d[xColumn]; })); <br>
+            &nbsp;  colorScale.domain(data.map(function (d){ return d[colorColumn]; })); <br>
+            &nbsp;  pie.value(function(d) { return d[sliceSizeColumn]; }); <br>
+            <br>
+            &nbsp;  xAxisG.call(xAxis); <br>
             <br>
             &nbsp;  var pieData = pie(data); <br>
-            &nbsp;  var singleSlice = pieData[0]; <br>
-            &nbsp;  var svgPathString = arc(singleSlice); <br>
             <br>
-            &nbsp;  d3.select("body").append("pre") <br>
-            &nbsp;&nbsp; .text(JSON.stringify(svgPathString, null, 2)); <br>
+            &nbsp;  pieG.attr("transform", "translate(" + innerWidth / 2 + "," + innerHeight / 2 + ")"); <br>
+            <br>
+            &nbsp;  var slices = pieG.selectAll("path").data(pieData); <br>
+            &nbsp;  slices.enter().append("path"); <br>
+            &nbsp;  slices <br>
+            &nbsp;&nbsp;    .attr("d", arc) <br>
+            &nbsp;&nbsp;    .attr("fill", function (d){ return colorScale(d.data[colorColumn]); }); <br>
+            &nbsp;  slices.exit().remove(); <br>
             &nbsp;} <br>
             <br>
             &nbsp;function type(d){ <br>
-            &nbsp;  d.population = +d.population; <br>
-            &nbsp;  return d; <br>
+            &nbsp;&nbsp;  d.name = "World"; <br>
+            &nbsp;&nbsp;  d.population = +d.population; <br>
+            &nbsp;&nbsp;  return d; <br>
             &nbsp;} <br>
             <br>
             &nbsp;d3.csv("religionWorldTotals.csv", type, render); <br>
+
                   <br>
             &lt;/script&gt;
           </code>
