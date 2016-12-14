@@ -1083,3 +1083,81 @@ var outerWidth117 = 500;
  }
 
  d3.csv("religionWorldTotals.csv", type117, render117);
+
+ // example-118
+ var outerWidth118 = 500;
+  var outerHeight118 = 250;
+  var margin118 = { left: 90, top: 30, right: 150, bottom: 30 };
+  var outerRadius118 = 80;
+  var innerRadius118 = 40;
+
+  var xColumn118 = "name";
+  var sliceSizeColumn118 = "population";
+  var colorColumn118 = "religion";
+
+  var innerWidth118 = outerWidth118 - margin118.left - margin118.right;
+  var innerHeight118 = outerHeight118 - margin118.top - margin118.bottom;
+
+  var svg118 = d3.select("#example-118").append("svg")
+   .attr("width", outerWidth118)
+   .attr("height", outerHeight118);
+  var g118 = svg118.append("g")
+   .attr("transform", "translate(" + margin118.left + "," + margin118.top + ")");
+  var xAxisG118 = g118.append("g")
+   .attr("class", "x axis")
+   .attr("transform", "translate(0," + innerHeight118 + ")");
+  // group element that contain all the pie slices
+  var pieG118 = g118.append("g");
+
+  // color legend
+  var colorLegendG118 = g118.append("g")
+   .attr("class", "color-legend")
+   .attr("transform", "translate(235, 20)");
+
+  var xScale118 = d3.scale.ordinal().rangePoints([0, innerWidth118]);
+  var colorScale118 = d3.scale.category10();
+
+  var xAxis118 = d3.svg.axis().scale(xScale118).orient("bottom")
+   .outerTickSize(0);
+
+  var pie118 = d3.layout.pie();
+  var arc118 = d3.svg.arc();
+  arc118.outerRadius(outerRadius118);
+  arc118.innerRadius(innerRadius118);
+
+  var colorLegend118 = d3.legend.color()
+     .scale(colorScale118)
+     .shapePadding(3)
+     .shapeWidth(15)
+     .shapeHeight(15)
+     .labelOffset(4);
+
+  function render118(data){
+   xScale118.domain(data.map( function (d){ return d[xColumn118]; }));
+   colorScale118.domain(data.map(function (d){ return d[colorColumn118]; }));
+   pie118.value(function(d) { return d[sliceSizeColumn118]; });
+
+   xAxisG118.call(xAxis118);
+
+   var pieData118 = pie118(data);
+
+   pieG118.attr("transform", "translate(" + innerWidth118 / 2 + "," + innerHeight118 / 2 + ")");
+
+   // binding all pie data to the slice paths
+   var slices118 = pieG118.selectAll("path").data(pieData118);
+   slices118.enter().append("path");
+   slices118
+    .attr("d", arc118)
+    .attr("fill", function (d){ return colorScale118(d.data[colorColumn118]); });
+   slices118.exit().remove();
+
+   colorLegendG118.call(colorLegend118);
+  }
+
+  function type118(d){
+    d.name = "World";
+    d.population = +d.population;
+    return d;
+  }
+
+  d3.csv("religionWorldTotals.csv", type118, render118);
