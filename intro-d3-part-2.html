@@ -32,6 +32,7 @@
         <li><a href="#pie-chart">Pie chart</a></li>
         <li><a href="#pie-color-legend">Add color legend</a></li>
         <li><a href="#donut-chart">Donut chart</a></li>
+        <li><a href="#polar-area-diagram">Polar area diagram</a></li>
 			</ul>
 		</div>
 		<div class="col-md-10 col-xs-12 main-container">
@@ -1609,6 +1610,109 @@
             &nbsp;&nbsp;  d.name = "World"; <br>
             &nbsp;&nbsp;  d.population = +d.population; <br>
             &nbsp;&nbsp;  return d; <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;d3.csv("religionWorldTotals.csv", type, render); <br>
+
+                  <br>
+            &lt;/script&gt;
+          </code>
+				</div>
+      </div>
+      <br>
+      <div id="polar-area-diagram">
+				<h4>Polar area diagram</h4>
+				<div class="row panel">
+          <div id="example-119"></div>
+					<p>index.html</p>
+          <code>
+            &lt;style&gt; <br>
+            &nbsp;.color-legend text { <br>
+            &nbsp;  font-family: 'Open Sans', sans-serif; <br>
+            &nbsp;  font-size: 12pt; <br>
+            &nbsp;} <br>
+            &lt;/style&gt; <br>
+            <br>
+            &lt;script&gt; <br>
+            <br>
+            &nbsp;var outerWidth = 500; <br>
+            &nbsp;var outerHeight = 250; <br>
+            &nbsp;var margin = { left: 90, top: 30, right: 150, bottom: 30 }; <br>
+            <br>
+            &nbsp;var xColumn = "name"; <br>
+            <br>
+            &nbsp;var colorColumn = "religion"; <br>
+            &nbsp;var radiusColumn = "population"; <br>
+            &nbsp;var radiusMax = 100; <br>
+            <br>
+            &nbsp;var innerWidth = outerWidth - margin.left - margin.right; <br>
+            &nbsp;var innerHeight = outerHeight - margin.top - margin.bottom; <br>
+            <br>
+            &nbsp;var svg = d3.select("#example-").append("svg") <br>
+            &nbsp;  .attr("width", outerWidth) <br>
+            &nbsp;  .attr("height", outerHeight); <br>
+            &nbsp;var g = svg.append("g") <br>
+            &nbsp;  .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); <br>
+            &nbsp;var xAxisG = g.append("g") <br>
+            &nbsp;  .attr("class", "x axis") <br>
+            &nbsp;  .attr("transform", "translate(0," + innerHeight + ")"); <br>
+            <br>
+            &nbsp;// group element that contain all the pie slices <br>
+            &nbsp;var pieG = g.append("g"); <br>
+            <br>
+            &nbsp;// color legend <br>
+            &nbsp;var colorLegendG = g.append("g") <br>
+            &nbsp;  .attr("class", "color-legend") <br>
+            &nbsp;  .attr("transform", "translate(235, 20)"); <br>
+            <br>
+            &nbsp;var xScale = d3.scale.ordinal().rangePoints([0, innerWidth]); <br>
+            <br>
+            &nbsp;var radiusScale = d3.scale.sqrt().range([0, radiusMax]); <br>
+            &nbsp;var colorScale = d3.scale.category10(); <br>
+            <br>
+            &nbsp;var xAxis = d3.svg.axis().scale(xScale).orient("bottom") <br>
+            &nbsp;  .outerTickSize(0); <br>
+            <br>
+            &nbsp;var pie = d3.layout.pie(); <br>
+            &nbsp;var arc = d3.svg.arc(); <br>
+            <br>
+            &nbsp;var colorLegend = d3.legend.color() <br>
+            &nbsp;  .scale(colorScale) <br>
+            &nbsp;  .shapePadding(3) <br>
+            &nbsp;  .shapeWidth(15) <br>
+            &nbsp;  .shapeHeight(15) <br>
+            &nbsp;  .labelOffset(4); <br>
+            <br>
+            &nbsp;function render(data){ <br>
+            &nbsp;  xScale.domain(data.map( function (d){ return d[xColumn]; })); <br>
+            &nbsp;  radiusScale.domain([0, d3.max(data, function (d){ return d[radiusColumn]; })]); <br>
+            &nbsp;  colorScale.domain(data.map(function (d){ return d[colorColumn]; })); <br>
+            <br>
+            &nbsp; pie.value(function (){ return 1; }); <br>
+            &nbsp; arc.outerRadius(function(d) { <br>
+            &nbsp;   return radiusScale(d.data[radiusColumn]); <br>
+            &nbsp; }); <br>
+            <br>
+            &nbsp;var pieData = pie(data); <br>
+            <br>
+            &nbsp;pieG.attr("transform", "translate(" + innerWidth / 2 + "," + innerHeight / 2 + ")"); <br>
+            <br>
+            &nbsp;// binding all pie data to the slice paths <br>
+            &nbsp;var slices = pieG.selectAll("path").data(pieData); <br>
+            &nbsp;slices19.enter().append("path"); <br>
+            &nbsp;slices <br>
+            &nbsp; .attr("d", arc) <br>
+            &nbsp; .attr("fill", function (d){ return colorScale(d.data[colorColumn]); }); <br>
+            &nbsp;slices.exit().remove(); <br>
+            <br>
+            &nbsp;xAxisG.call(xAxis); <br>
+            &nbsp; colorLegendG.call(colorLegend); <br>
+            &nbsp;} <br>
+            <br>
+            &nbsp;function type(d){ <br>
+            &nbsp;  d.name = "World"; <br>
+            &nbsp;  d.population = +d.population; <br>
+            &nbsp;  return d; <br>
             &nbsp;} <br>
             <br>
             &nbsp;d3.csv("religionWorldTotals.csv", type, render); <br>

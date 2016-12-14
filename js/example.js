@@ -1161,3 +1161,85 @@ var outerWidth117 = 500;
   }
 
   d3.csv("religionWorldTotals.csv", type118, render118);
+
+  // example-119
+  var outerWidth119 = 500;
+   var outerHeight119 = 250;
+   var margin119 = { left: 90, top: 30, right: 150, bottom: 30 };
+
+   var xColumn119 = "name";
+
+   var colorColumn119 = "religion";
+   var radiusColumn119 = "population";
+   var radiusMax119 = 100;
+
+   var innerWidth119 = outerWidth119 - margin119.left - margin119.right;
+   var innerHeight119 = outerHeight119 - margin119.top - margin119.bottom;
+
+   var svg119 = d3.select("#example-119").append("svg")
+    .attr("width", outerWidth119)
+    .attr("height", outerHeight119);
+   var g119 = svg119.append("g")
+    .attr("transform", "translate(" + margin119.left + "," + margin119.top + ")");
+   var xAxisG119 = g119.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + innerHeight119 + ")");
+   // group element that contain all the pie slices
+   var pieG119 = g119.append("g");
+
+   // color legend
+   var colorLegendG119 = g119.append("g")
+    .attr("class", "color-legend")
+    .attr("transform", "translate(235, 20)");
+
+   var xScale119 = d3.scale.ordinal().rangePoints([0, innerWidth119]);
+
+   var radiusScale119 = d3.scale.sqrt().range([0, radiusMax119]);
+   var colorScale119 = d3.scale.category10();
+
+   var xAxis119 = d3.svg.axis().scale(xScale119).orient("bottom")
+    .outerTickSize(0);
+
+   var pie119 = d3.layout.pie();
+   var arc119 = d3.svg.arc();
+
+   var colorLegend119 = d3.legend.color()
+      .scale(colorScale119)
+      .shapePadding(3)
+      .shapeWidth(15)
+      .shapeHeight(15)
+      .labelOffset(4);
+
+   function render119(data){
+     xScale119.domain(data.map( function (d){ return d[xColumn119]; }));
+     radiusScale119.domain([0, d3.max(data, function (d){ return d[radiusColumn119]; })]);
+     colorScale119.domain(data.map(function (d){ return d[colorColumn119]; }));
+
+     pie119.value(function (){ return 1; });
+     arc119.outerRadius(function(d) {
+      return radiusScale119(d.data[radiusColumn119]);
+     });
+
+     var pieData119 = pie119(data);
+
+     pieG119.attr("transform", "translate(" + innerWidth119 / 2 + "," + innerHeight119 / 2 + ")");
+
+     // binding all pie data to the slice paths
+     var slices119 = pieG119.selectAll("path").data(pieData119);
+     slices119.enter().append("path");
+     slices119
+      .attr("d", arc119)
+      .attr("fill", function (d){ return colorScale119(d.data[colorColumn119]); });
+     slices119.exit().remove();
+
+     xAxisG119.call(xAxis119);
+     colorLegendG119.call(colorLegend119);
+   }
+
+   function type119(d){
+     d.name = "World";
+     d.population = +d.population;
+     return d;
+   }
+
+   d3.csv("religionWorldTotals.csv", type119, render119);
